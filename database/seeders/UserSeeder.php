@@ -18,9 +18,8 @@ class UserSeeder extends Seeder
         // Ambil divisi yang akan digunakan
         $divisiKPK = Divisi::where('divisi', 'KPK')->first();
         $divisiFinance = Divisi::where('divisi', 'Finance')->first();
-        $divisiZakat = Divisi::where('divisi', 'Zakat')->first();
-        $divisiInfaq = Divisi::where('divisi', 'Infaq')->first();
-        $divisiMultimedia = Divisi::where('divisi', 'Multimedia')->first();
+        $divisiProgram = Divisi::where('divisi', 'Program')->first();
+        $divisiRSM = Divisi::where('divisi', 'RSM')->first();
         $divisiPenghimpunan = Divisi::where('divisi', 'Penghimpunan')->first();
         $divisiWakaf = Divisi::where('divisi', 'Wakaf')->first();
         $divisiBMIKKR = Divisi::where('divisi', 'BMI KKR')->first();
@@ -72,33 +71,23 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        if ($divisiZakat) {
+        if ($divisiProgram) {
             User::create([
-                'name' => 'Kabag Zakat',
-                'email' => 'kabagzakat@bmi.com',
+                'name' => 'Kabag Program',
+                'email' => 'kabagprogram@bmi.com',
                 'password' => Hash::make('bmi123'),
                 'role' => 'kabag',
-                'divisi_id' => $divisiZakat->id,
+                'divisi_id' => $divisiProgram->id,
             ]);
         }
 
-        if ($divisiInfaq) {
+        if ($divisiRSM) {
             User::create([
-                'name' => 'Kabag Infaq',
-                'email' => 'kabaginfaq@bmi.com',
+                'name' => 'Kabag RSM',
+                'email' => 'kabagrsm@bmi.com',
                 'password' => Hash::make('bmi123'),
                 'role' => 'kabag',
-                'divisi_id' => $divisiInfaq->id,
-            ]);
-        }
-
-        if ($divisiMultimedia) {
-            User::create([
-                'name' => 'Kabag Multimedia',
-                'email' => 'kabagmultimedia@bmi.com',
-                'password' => Hash::make('bmi123'),
-                'role' => 'kabag',
-                'divisi_id' => $divisiMultimedia->id,
+                'divisi_id' => $divisiRSM->id,
             ]);
         }
 
@@ -164,33 +153,23 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        if ($divisiZakat) {
+        if ($divisiProgram) {
             User::create([
-                'name' => 'PJ Zakat',
-                'email' => 'pjzakat@bmi.com',
+                'name' => 'PJ Program',
+                'email' => 'pjprogram@bmi.com',
                 'password' => Hash::make('bmi123'),
                 'role' => 'pj_divisi',
-                'divisi_id' => $divisiZakat->id,
+                'divisi_id' => $divisiProgram->id,
             ]);
         }
 
-        if ($divisiInfaq) {
+        if ($divisiRSM) {
             User::create([
-                'name' => 'PJ Infaq',
-                'email' => 'pjinfaq@bmi.com',
+                'name' => 'PJ RSM',
+                'email' => 'pjrsm@bmi.com',
                 'password' => Hash::make('bmi123'),
                 'role' => 'pj_divisi',
-                'divisi_id' => $divisiInfaq->id,
-            ]);
-        }
-
-        if ($divisiMultimedia) {
-            User::create([
-                'name' => 'PJ Multimedia',
-                'email' => 'pjmultimedia@bmi.com',
-                'password' => Hash::make('bmi123'),
-                'role' => 'pj_divisi',
-                'divisi_id' => $divisiMultimedia->id,
+                'divisi_id' => $divisiRSM->id,
             ]);
         }
 
