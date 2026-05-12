@@ -28,7 +28,6 @@
 
         .menu-container {
             background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -46,10 +45,7 @@
             }
         }
 
-        .menu-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-        }
+
 
         .primary-color {
             color: #6a0dad;
@@ -88,74 +84,21 @@
             left: 100%;
         }
 
-        .animated-bg {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: linear-gradient(45deg, #6a0dad, #9c4ade);
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-            animation: morph 8s ease-in-out infinite;
-            opacity: 0.1;
-            z-index: -1;
-        }
-
-        @keyframes morph {
-            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-            25% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
-            50% { border-radius: 30% 70% 70% 30% / 70% 70% 30% 30%; }
-            75% { border-radius: 70% 30% 30% 70% / 30% 30% 70% 70%; }
-            100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-        }
-
-        .menu-icon {
-            transition: all 0.3s ease;
-        }
-
-        .menu-btn:hover .menu-icon {
-            transform: scale(1.2);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .title {
-            animation: fadeIn 1s ease-out;
-        }
-
-        .floating {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
         @media (max-width: 640px) {
             .menu-container {
                 width: 95%;
                 margin: 10px;
-            }
-            
-            .animated-bg {
-                width: 250px;
-                height: 250px;
             }
         }
     </style>
 </head>
 <body>
     <div class="menu-container p-4 md:p-6">
-        <div class="animated-bg top-0 left-0"></div>
-        <div class="animated-bg bottom-0 right-0"></div>
         
         <div class="flex flex-col items-center justify-center relative z-10">
-            <img src="img/logo2024.png" alt="BMI Logo" class="w-20 mb-2 floating">
+            <img src="img/logo2024.png" alt="BMI Logo" class="w-20 mb-2">
             
-            <h2 class="primary-color text-xl font-bold mb-1 title">
+            <h2 class="primary-color text-xl font-bold mb-1">
                 Asset & GA
             </h2>
             
@@ -184,7 +127,7 @@
                     <i class="fas fa-chevron-right opacity-70 group-hover:opacity-100 transition-opacity text-xs"></i>
                 </a>
                 
-                <a href="/pendataan-stok" class="menu-btn flex items-center justify-between px-4 py-2.5 rounded-xl text-white font-medium group">
+                <!-- <a href="/pendataan-stok" class="menu-btn flex items-center justify-between px-4 py-2.5 rounded-xl text-white font-medium group">
                     <div class="flex items-center">
                         <div class="bg-white bg-opacity-20 rounded-full p-1.5 mr-3">
                             <i class="fas fa-exclamation-triangle menu-icon text-sm"></i>
@@ -192,7 +135,7 @@
                         <span class="text-sm">Ajuan Darurat</span>
                     </div>
                     <i class="fas fa-chevron-right opacity-70 group-hover:opacity-100 transition-opacity text-xs"></i>
-                </a>
+                </a> -->
                 
                 <a href="/login" class="menu-btn flex items-center justify-between px-4 py-2.5 rounded-xl text-white font-medium group">
                     <div class="flex items-center">

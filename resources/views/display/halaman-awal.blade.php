@@ -22,7 +22,6 @@
 
         .login-container {
             background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -42,27 +41,9 @@
         }
         }
 
-        .login-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-        }
-
-        .logo {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(2deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
 
         .primary-color {
             color: #a95199;
-        }
-
-        #typing-text {
-            display: inline-block;
         }
 
         h2.primary-color {
@@ -105,48 +86,11 @@
             left: 100%;
         }
 
-        .animated-bg {
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: linear-gradient(45deg, #a95199, #c87fb6);
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-            animation: morph 8s ease-in-out infinite;
-            opacity: 0.1;
-            z-index: -1;
-        }
-
-        @keyframes morph {
-            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-            25% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
-            50% { border-radius: 30% 70% 70% 30% / 70% 70% 30% 30%; }
-            75% { border-radius: 70% 30% 30% 70% / 30% 30% 70% 70%; }
-            100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-        }
-
-        .typing-cursor {
-            display: inline-block;
-            width: 2px;
-            height: 1em;
-            background-color: #a95199;
-            margin-left: 2px;
-            animation: blink 1s infinite;
-            vertical-align: middle;
-            position: relative;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
 
         .feature-icon {
             transition: all 0.3s ease;
         }
 
-        .login-container:hover .feature-icon {
-            transform: scale(1.1);
-        }
 
         @media (max-width: 360px) {
         .feature-icon {
@@ -156,25 +100,17 @@
             font-size: 0.8rem;
             }
         }
-        .typing-container {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
     </style>
 </head>
 <body class="flex items-center justify-center">
     <div class="login-container w-11/12 max-w-md p-8 md:p-10">
-        <div class="animated-bg top-0 left-0"></div>
-        <div class="animated-bg bottom-0 right-0"></div>
         
         <div class="flex flex-col items-center justify-center relative z-10">
             <img src="img/logo2024.png" alt="BMI Logo" class="logo w-32 mb-6">
             
-            <h2 class="primary-color text-2xl font-bold mb-2 flex justify-center items-center">
-                <div class="typing-container flex items-center justify-center">
-                    <span id="typing-text"></span><span class="typing-cursor"></span>
-                </div>
+            <h2 class="primary-color text-2xl font-bold mb-2 flex flex-col justify-center items-center text-center">
+                <!-- <span>Selamat Datang</span> -->
+                <span>Sistem BMI</span>
             </h2>
             
             <p class="text-gray-600 mb-6 text-center">Asset & GA Management System</p>
@@ -212,52 +148,9 @@
     </div>
 
     <script>
-        const welcomeMessages = [
-            "Assalamualaikum Wr. Wb.",
-            "Selamat Datang",
-            "BMIPusat-Aset Online"
-        ];
-        
-        const textElement = document.getElementById('typing-text');
-        let messageIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let typingSpeed = 100;
-        
-        function typeEffect() {
-            const currentMessage = welcomeMessages[messageIndex];
-            
-            if (isDeleting) {
-                textElement.textContent = currentMessage.substring(0, charIndex - 1);
-                charIndex--;
-                typingSpeed = 50;
-            } else {
-                textElement.textContent = currentMessage.substring(0, charIndex + 1);
-                charIndex++;
-                typingSpeed = 100;
-            }
-
-            const cursor = document.querySelector('.typing-cursor');
-            if (cursor) {
-                cursor.style.display = 'inline-block';
-            }
-            
-            if (!isDeleting && charIndex === currentMessage.length) {
-                isDeleting = true;
-                typingSpeed = 2000;
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                messageIndex = (messageIndex + 1) % welcomeMessages.length;
-                typingSpeed = 500;
-            }
-                       
-            setTimeout(typeEffect, typingSpeed);
-        }
-        typeEffect();
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById('current-date').textContent = now.toLocaleDateString('id-ID', options);
-        // Parallax mousemove effect dinonaktifkan untuk menghemat CPU browser.
     </script>
 </body>
 </html>
