@@ -150,6 +150,17 @@ Route::post('/admin/ajuan/batch-mark-match', [AjuanStokDivisiController::class, 
     ->name('ajuan.batch-mark-match');
 Route::get('/admin/cek-bulanan/get-stok-detail/{id}', [AjuanStokDivisiController::class, 'getStokDetailCekBulanan'])
     ->name('cek-bulanan.get-stok-detail');
-    Route::post('/admin/cek-bulanan/batch-mark-match', [AjuanStokDivisiController::class, 'batchMarkMatch']);
-    
-    
+Route::post('/admin/cek-bulanan/batch-mark-match', [AjuanStokDivisiController::class, 'batchMarkMatch']);
+
+// Peminjaman Kendaraan Routes (Public)
+use App\Http\Controllers\PeminjamanController;
+
+Route::get('/peminjaman/jadwal', [PeminjamanController::class, 'jadwal'])->name('peminjaman.jadwal');
+Route::get('/peminjaman/kendaraan', [PeminjamanController::class, 'create'])->name('peminjaman.create');
+Route::post('/peminjaman/kendaraan', [PeminjamanController::class, 'store'])->name('peminjaman.store');
+Route::get('/peminjaman/success', [PeminjamanController::class, 'success'])->name('peminjaman.success');
+
+// Peminjaman Kendaraan Routes (Admin Approval)
+Route::get('/peminjaman/approval/{token}', [PeminjamanController::class, 'approvalView'])->name('peminjaman.approval');
+Route::post('/peminjaman/approval/{token}/approve', [PeminjamanController::class, 'approve'])->name('peminjaman.approve');
+Route::post('/peminjaman/approval/{token}/reject', [PeminjamanController::class, 'reject'])->name('peminjaman.reject');
