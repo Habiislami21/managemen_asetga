@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-image: url('img/background-1.png');
+            background-image: url('img/background-1.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -118,26 +118,26 @@
             <div class="grid grid-cols-3 gap-2 sm:gap-4 w-full mb-8">
                 <div class="flex flex-col items-center text-center">
                     <div class="feature-icon bg-purple-100 rounded-full p-3 mb-2">
-                        <i class="fas fa-tasks text-purple-600"></i>
+                        <i class="fas fa-chart-bar text-purple-600"></i>
                     </div>
-                    <span class="text-xs text-gray-600">Asset Tracking</span>
+                    <span class="text-xs text-gray-600">Asset Report</span>
                 </div>
                 <div class="flex flex-col items-center text-center">
                     <div class="feature-icon bg-purple-100 rounded-full p-3 mb-2">
-                        <i class="fas fa-chart-line text-purple-600"></i>
+                        <i class="fas fa-file-contract text-purple-600"></i>
                     </div>
-                    <span class="text-xs text-gray-600">GA Analytics</span>
+                    <span class="text-xs text-gray-600">GA Requirements</span>
                 </div>
                 <div class="flex flex-col items-center text-center">
                     <div class="feature-icon bg-purple-100 rounded-full p-3 mb-2">
-                        <i class="fas fa-sync text-purple-600"></i>
+                        <i class="fas fa-car text-purple-600"></i>
                     </div>
-                    <span class="text-xs text-gray-600 whitespace-nowrap">Updates</span>
+                    <span class="text-xs text-gray-600 whitespace-nowrap">Vehicle Info</span>
                 </div>
             </div>
             
             <a href="/menu-awal" class="login-btn w-full py-3 px-6 rounded-lg text-white font-medium text-center transition-all flex items-center justify-center gap-2">
-                <span>Yuk Masuk</span>
+                <span>Assalamualaikum</span>
                 <i class="fas fa-arrow-right"></i>
             </a>
             

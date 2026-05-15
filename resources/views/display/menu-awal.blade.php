@@ -16,7 +16,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-image: url('img/background-1.png');
+            background-image: url('img/background-1.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -137,17 +137,7 @@
                     <i class="fas fa-chevron-right opacity-70 group-hover:opacity-100 transition-opacity text-xs"></i>
                 </a> -->
                 
-                <a href="/login" class="menu-btn flex items-center justify-between px-4 py-2.5 rounded-xl text-white font-medium group">
-                    <div class="flex items-center">
-                        <div class="bg-white bg-opacity-20 rounded-full p-1.5 mr-3">
-                            <i class="fas fa-user-shield menu-icon text-sm"></i>
-                        </div>
-                        <span class="text-sm">Admin</span>
-                    </div>
-                    <i class="fas fa-chevron-right opacity-70 group-hover:opacity-100 transition-opacity text-xs"></i>
-                </a>
-
-                <a href="{{ route('peminjaman.create') }}" class="menu-btn flex items-center justify-between px-4 py-2.5 rounded-xl text-white font-medium group" style="margin-top: 4px;">
+                <a href="{{ route('peminjaman.create') }}" class="menu-btn flex items-center justify-between px-4 py-2.5 rounded-xl text-white font-medium group">
                     <div class="flex items-center">
                         <div class="bg-white bg-opacity-20 rounded-full p-1.5 mr-3">
                             <i class="fas fa-car menu-icon text-sm"></i>
@@ -163,6 +153,16 @@
                             <i class="fas fa-calendar-alt menu-icon text-sm"></i>
                         </div>
                         <span class="text-sm">Cek Jadwal Kendaraan</span>
+                    </div>
+                    <i class="fas fa-chevron-right opacity-70 group-hover:opacity-100 transition-opacity text-xs"></i>
+                </a>
+
+                <a href="/login" class="menu-btn flex items-center justify-between px-4 py-2.5 rounded-xl text-white font-medium group">
+                    <div class="flex items-center">
+                        <div class="bg-white bg-opacity-20 rounded-full p-1.5 mr-3">
+                            <i class="fas fa-user-shield menu-icon text-sm"></i>
+                        </div>
+                        <span class="text-sm">Admin</span>
                     </div>
                     <i class="fas fa-chevron-right opacity-70 group-hover:opacity-100 transition-opacity text-xs"></i>
                 </a>
