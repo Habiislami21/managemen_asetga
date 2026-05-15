@@ -22,8 +22,6 @@ class UserSeeder extends Seeder
         $divisiRSM = Divisi::where('divisi', 'RSM')->first();
         $divisiPenghimpunan = Divisi::where('divisi', 'Penghimpunan')->first();
         $divisiWakaf = Divisi::where('divisi', 'Wakaf')->first();
-        $divisiBMIKKR = Divisi::where('divisi', 'BMI KKR')->first();
-        $divisiBMIPontianak = Divisi::where('divisi', 'BMI Pontianak')->first();
 
         // User dengan role admin, aset, ga tidak perlu divisi
         User::create([
@@ -111,25 +109,7 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        if ($divisiBMIKKR) {
-            User::create([
-                'name' => 'Kabag BMI KKR',
-                'email' => 'kabagbmikkr@bmi.com',
-                'password' => Hash::make('bmi123'),
-                'role' => 'kabag',
-                'divisi_id' => $divisiBMIKKR->id,
-            ]);
-        }
 
-        if ($divisiBMIPontianak) {
-            User::create([
-                'name' => 'Kabag BMI Pontianak',
-                'email' => 'kabagbmipontianak@bmi.com',
-                'password' => Hash::make('bmi123'),
-                'role' => 'kabag',
-                'divisi_id' => $divisiBMIPontianak->id,
-            ]);
-        }
 
 
         // PJ untuk setiap divisi
@@ -193,24 +173,6 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        if ($divisiBMIKKR) {
-            User::create([
-                'name' => 'PJ BMI KKR',
-                'email' => 'pjbmikkr@bmi.com',
-                'password' => Hash::make('bmi123'),
-                'role' => 'pj_divisi',
-                'divisi_id' => $divisiBMIKKR->id,
-            ]);
-        }
 
-        if ($divisiBMIPontianak) {
-            User::create([
-                'name' => 'PJ BMI Pontianak',
-                'email' => 'pjbmipontianak@bmi.com',
-                'password' => Hash::make('bmi123'),
-                'role' => 'pj_divisi',
-                'divisi_id' => $divisiBMIPontianak->id,
-            ]);
-        }
     }
 }

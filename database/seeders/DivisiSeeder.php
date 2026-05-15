@@ -21,8 +21,6 @@ class DivisiSeeder extends Seeder
             ['divisi' => 'RSM', 'is_pusat' => false],
             ['divisi' => 'Penghimpunan', 'is_pusat' => false],
             ['divisi' => 'Wakaf', 'is_pusat' => false],
-            ['divisi' => 'BMI KKR', 'is_pusat' => false],
-            ['divisi' => 'BMI Pontianak', 'is_pusat' => false],
         ];
 
         foreach ($divisiList as $divisi) {

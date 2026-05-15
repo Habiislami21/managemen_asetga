@@ -13,8 +13,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            DivisiSeeder::class,  // Harus dijalankan dulu
-            UserSeeder::class,    // Baru kemudian UserSeeder
+            DivisiSeeder::class,
+            UserSeeder::class,
+            KendaraanSeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();
 
