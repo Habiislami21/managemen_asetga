@@ -121,6 +121,15 @@ class PeminjamanController extends Controller
 
         try {
             $this->whatsAppService->sendMessageCurl($groupId, $waMessage);
+            
+            // Kirim pesan notifikasi ke peminjam
+            $waDriver = "*Notifikasi Sistem BMI*\n\n";
+            $waDriver .= "Halo {$peminjaman->nama_peminjam},\n\n";
+            $waDriver .= "Pengajuan peminjaman kendaraan *{$kendaraan->nama}* untuk tanggal *{$tanggalIndo}* telah kami terima.\n";
+            $waDriver .= "Mohon menunggu persetujuan dari Admin. Kami akan mengabari Anda kembali melalui pesan ini.\n\n";
+            $waDriver .= "Terima kasih.";
+            
+            $this->whatsAppService->sendMessageCurl($peminjaman->nomor_hp, $waDriver);
         } catch (\Exception $e) {
             \Log::error('Gagal mengirim WhatsApp Peminjaman: ' . $e->getMessage());
         }
@@ -144,7 +153,7 @@ class PeminjamanController extends Controller
 
     public function approve(Request $request, $token)
     {
-        $peminjaman = Peminjaman::where('approval_token', $token)->firstOrFail();
+        $peminjaman = Peminjaman::with('kendaraan')->where('approval_token', $token)->firstOrFail();
 
         if ($peminjaman->status !== 'pending') {
             return back()->with('error', 'Status pengajuan ini sudah ' . $peminjaman->status);
@@ -155,13 +164,32 @@ class PeminjamanController extends Controller
             'approved_at' => now(),
             // 'approved_by' => 'admin_name' jika perlu
         ]);
+        
+        // Kirim notifikasi WA ke peminjam
+        try {
+            $tanggalIndo = \Carbon\Carbon::parse($peminjaman->tanggal_pinjam)->locale('id')->translatedFormat('d F Y');
+            $jamIndo = \Carbon\Carbon::parse($peminjaman->jam_pinjam)->format('H.i') . ' - ' . \Carbon\Carbon::parse($peminjaman->jam_kembali)->format('H.i') . ' WIB';
+            
+            $waDriver = "*Notifikasi Persetujuan Peminjaman*\n\n";
+            $waDriver .= "Halo {$peminjaman->nama_peminjam},\n\n";
+            $waDriver .= "Pengajuan peminjaman kendaraan Anda telah *DISETUJUI*.\n\n";
+            $waDriver .= "*Kendaraan:* {$peminjaman->kendaraan->nama}\n";
+            $waDriver .= "*Tanggal:* {$tanggalIndo}\n";
+            $waDriver .= "*Jam:* {$jamIndo}\n\n";
+            $waDriver .= "Silakan ambil kunci kendaraan di bagian GA sesuai jadwal yang ditentukan.\n\n";
+            $waDriver .= "Terima kasih.";
+            
+            $this->whatsAppService->sendMessageCurl($peminjaman->nomor_hp, $waDriver);
+        } catch (\Exception $e) {
+            \Log::error('Gagal mengirim WhatsApp Approve: ' . $e->getMessage());
+        }
 
         return redirect()->route('peminjaman.approval', $token)->with('success', 'Peminjaman berhasil di-Approve!');
     }
 
     public function reject(Request $request, $token)
     {
-        $peminjaman = Peminjaman::where('approval_token', $token)->firstOrFail();
+        $peminjaman = Peminjaman::with('kendaraan')->where('approval_token', $token)->firstOrFail();
 
         if ($peminjaman->status !== 'pending') {
             return back()->with('error', 'Status pengajuan ini sudah ' . $peminjaman->status);
@@ -173,6 +201,100 @@ class PeminjamanController extends Controller
             'approved_at' => now(),
         ]);
 
+        // Kirim notifikasi WA ke peminjam
+        try {
+            $tanggalIndo = \Carbon\Carbon::parse($peminjaman->tanggal_pinjam)->locale('id')->translatedFormat('d F Y');
+            
+            $waDriver = "*Notifikasi Penolakan Peminjaman*\n\n";
+            $waDriver .= "Mohon maaf {$peminjaman->nama_peminjam},\n\n";
+            $waDriver .= "Pengajuan peminjaman kendaraan *{$peminjaman->kendaraan->nama}* untuk tanggal *{$tanggalIndo}* *DITOLAK*.\n\n";
+            $waDriver .= "*Alasan penolakan:* " . $request->input('catatan_admin') . "\n\n";
+            $waDriver .= "Silakan hubungi Admin GA jika ada pertanyaan.\n\n";
+            $waDriver .= "Terima kasih.";
+            
+            $this->whatsAppService->sendMessageCurl($peminjaman->nomor_hp, $waDriver);
+        } catch (\Exception $e) {
+            \Log::error('Gagal mengirim WhatsApp Reject: ' . $e->getMessage());
+        }
+
         return redirect()->route('peminjaman.approval', $token)->with('success', 'Peminjaman telah di-Reject.');
+    }
+
+    public function riwayat(Request $request)
+    {
+        $this->autoExpirePendingRequests();
+        
+        $peminjamans = Peminjaman::with('kendaraan')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+            
+        return view('peminjaman.riwayat', compact('peminjamans'));
+    }
+
+    public function statistikAuth(Request $request)
+    {
+        $password = $request->input('password');
+        
+        // Cek password statis (bisa diganti ambil dari .env)
+        if ($password === 'adminaset123') {
+            session(['statistik_unlocked' => true]);
+            return redirect()->route('peminjaman.statistik');
+        }
+        
+        return back()->with('error', 'Password salah!');
+    }
+
+    public function statistik(Request $request)
+    {
+        // Cek auth session
+        if (!session('statistik_unlocked')) {
+            return redirect()->route('peminjaman.jadwal')->with('error', 'Akses ditolak. Memerlukan password admin.');
+        }
+
+        $this->autoExpirePendingRequests();
+
+        $bulan = $request->input('bulan', date('m'));
+        $tahun = $request->input('tahun', date('Y'));
+
+        // Data chart penggunaan per kendaraan di bulan tertentu
+        $usagePerKendaraan = Peminjaman::selectRaw('kendaraan_id, COUNT(*) as total')
+            ->whereMonth('tanggal_pinjam', $bulan)
+            ->whereYear('tanggal_pinjam', $tahun)
+            ->whereIn('status', ['approved', 'completed'])
+            ->groupBy('kendaraan_id')
+            ->get();
+
+        $kendaraans = Kendaraan::all();
+        $chartLabels = [];
+        $chartData = [];
+
+        foreach ($kendaraans as $kendaraan) {
+            $chartLabels[] = $kendaraan->nama;
+            $usage = $usagePerKendaraan->firstWhere('kendaraan_id', $kendaraan->id);
+            $chartData[] = $usage ? $usage->total : 0;
+        }
+
+        // Data statistik pengemudi (berdasarkan nama_peminjam yang disetujui)
+        $topDrivers = Peminjaman::selectRaw('nama_peminjam, COUNT(*) as total_pinjam')
+            ->whereMonth('tanggal_pinjam', $bulan)
+            ->whereYear('tanggal_pinjam', $tahun)
+            ->whereIn('status', ['approved', 'completed'])
+            ->groupBy('nama_peminjam')
+            ->orderByDesc('total_pinjam')
+            ->limit(10)
+            ->get();
+            
+        // Penggunaan kendaraan teratas
+        $topKendaraan = Peminjaman::selectRaw('kendaraan_id, COUNT(*) as total_pinjam')
+            ->with('kendaraan')
+            ->whereMonth('tanggal_pinjam', $bulan)
+            ->whereYear('tanggal_pinjam', $tahun)
+            ->whereIn('status', ['approved', 'completed'])
+            ->groupBy('kendaraan_id')
+            ->orderByDesc('total_pinjam')
+            ->limit(5)
+            ->get();
+
+        return view('peminjaman.statistik', compact('chartLabels', 'chartData', 'topDrivers', 'topKendaraan', 'bulan', 'tahun'));
     }
 }

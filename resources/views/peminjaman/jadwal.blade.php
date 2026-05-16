@@ -174,9 +174,15 @@
             <a class="navbar-brand" href="{{ url('/menu-awal') }}">
                 <i class="fas fa-arrow-left me-2"></i>Kembali
             </a>
-            <div class="ms-auto">
+            <div class="ms-auto d-flex gap-2">
+                <button type="button" class="btn btn-outline-primary" onclick="bukaStatistik()">
+                    <i class="fas fa-chart-bar me-1"></i>Statistik
+                </button>
+                <a href="{{ route('peminjaman.riwayat') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-history me-1"></i>Riwayat
+                </a>
                 <a href="{{ route('peminjaman.create') }}" class="btn btn-custom">
-                    <i class="fas fa-plus me-2"></i>Ajukan Peminjaman
+                    <i class="fas fa-plus me-1"></i>Ajukan
                 </a>
             </div>
         </div>
@@ -284,5 +290,58 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function bukaStatistik() {
+            Swal.fire({
+                title: 'Otorisasi Admin',
+                text: 'Masukkan password admin untuk melihat statistik',
+                input: 'password',
+                inputPlaceholder: 'Password',
+                showCancelButton: true,
+                confirmButtonText: 'Masuk',
+                cancelButtonText: 'Batal',
+                inputAttributes: {
+                    autocapitalize: 'off',
+                    autocorrect: 'off'
+                },
+                preConfirm: (password) => {
+                    if (!password) {
+                        Swal.showValidationMessage('Password tidak boleh kosong');
+                        return false;
+                    }
+                    
+                    // Create dynamic form and submit
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '{{ route("peminjaman.statistik.auth") }}';
+                    
+                    const csrf = document.createElement('input');
+                    csrf.type = 'hidden';
+                    csrf.name = '_token';
+                    csrf.value = '{{ csrf_token() }}';
+                    form.appendChild(csrf);
+                    
+                    const passInput = document.createElement('input');
+                    passInput.type = 'hidden';
+                    passInput.name = 'password';
+                    passInput.value = password;
+                    form.appendChild(passInput);
+                    
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        }
+        
+        // Cek error session dari middleware/controller statistik
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Akses Ditolak',
+                text: '{{ session('error') }}'
+            });
+        @endif
+    </script>
 </body>
 </html>

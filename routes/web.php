@@ -159,6 +159,9 @@ Route::get('/peminjaman/jadwal', [PeminjamanController::class, 'jadwal'])->name(
 Route::get('/peminjaman/kendaraan', [PeminjamanController::class, 'create'])->name('peminjaman.create');
 Route::post('/peminjaman/kendaraan', [PeminjamanController::class, 'store'])->name('peminjaman.store');
 Route::get('/peminjaman/success', [PeminjamanController::class, 'success'])->name('peminjaman.success');
+Route::get('/peminjaman/riwayat', [PeminjamanController::class, 'riwayat'])->name('peminjaman.riwayat');
+Route::post('/peminjaman/statistik/auth', [PeminjamanController::class, 'statistikAuth'])->name('peminjaman.statistik.auth');
+Route::get('/peminjaman/statistik', [PeminjamanController::class, 'statistik'])->name('peminjaman.statistik');
 
 // Peminjaman Kendaraan Routes (Admin Approval)
 Route::get('/peminjaman/approval/{token}', [PeminjamanController::class, 'approvalView'])->name('peminjaman.approval');
