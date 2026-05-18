@@ -104,6 +104,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:ga,kabag,admin,aset'])->group(function () {
         Route::get('/approval-ajuan', [AjuanStokDivisiController::class, 'approvalPage'])->name('approval.page');
         Route::post('/approval-ajuan/proses', [AjuanStokDivisiController::class, 'prosesApproval'])->name('approval.proses');
+        Route::post('/approval-ajuan/proses-semua', [AjuanStokDivisiController::class, 'prosesApprovalSemua'])->name('approval.proses-semua');
     });
     Route::middleware(['role:admin,aset'])->group(function () {
         Route::get('admin/daftar-ajuan', [AjuanStokDivisiController::class, 'daftarAjuan'])->name('ajuan.daftar');

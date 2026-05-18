@@ -96,7 +96,7 @@ class AjuanStokDivisiController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Ajuan berhasil disubmit dengan nomor: ' . $ajuan->nomor_ajuan,
-                'data' => $ajuan->load(['stokPusat'])
+                'ajuan' => $ajuan->load(['stokPusat'])
             ]);
         } catch (\Exception $e) {
             Log::error('Error in submitAjuan: ' . $e->getMessage());
@@ -111,23 +111,17 @@ class AjuanStokDivisiController extends Controller
     {
         $user = Auth::user();
         
-        if (!in_array($user->role, ['ga', 'kabag', 'admin', 'aset'])) {
+        if (!in_array($user->role, ['ga', 'kabag'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         
         $ajuansPending = collect();
-        $ajuansPending2 = collect();
         $riwayatAjuan = collect();
         
         if ($user->role === 'ga') {
-            // Tahap 1: GA melihat ajuan yang sudah di-approve Kabag
+            // GA melihat ajuan yang sudah di-approve Kabag
             $ajuansPending = AjuanStokDivisi::where('status', 'checked_kabag')
                                            ->with(['divisi', 'stokPusat', 'pengaju', 'approvedByKabag'])
-                                           ->orderBy('created_at', 'asc')
-                                           ->get();
-            // Tahap Final: GA melihat ajuan yang direapprove Kabag
-            $ajuansPending2 = AjuanStokDivisi::where('status', 'reapproved_kabag')
-                                           ->with(['divisi', 'stokPusat', 'pengaju', 'approvedByKabag', 'processedByAdmin', 'reapprovedByKabag'])
                                            ->orderBy('created_at', 'asc')
                                            ->get();
             
@@ -138,68 +132,118 @@ class AjuanStokDivisiController extends Controller
                                           ->paginate(10);
                                           
         } elseif ($user->role === 'kabag') {
-            // Tahap 1: Kabag melihat ajuan pending untuk divisinya dari PJ Divisi
+            // Kabag melihat ajuan pending untuk divisinya dari PJ Divisi
             $ajuansPending = AjuanStokDivisi::where('status', 'pending')
                                            ->where('divisi_id', $user->divisi_id)
                                            ->with(['divisi', 'stokPusat', 'pengaju'])
                                            ->orderBy('created_at', 'asc')
                                            ->get();
                                            
-            // Tahap 2: Kabag melihat riwayat/verifikasi inputan admin
-            $ajuansPending2 = AjuanStokDivisi::where('status', 'processed_admin')
-                                           ->where('divisi_id', $user->divisi_id)
-                                           ->with(['divisi', 'stokPusat', 'pengaju', 'approvedByGA', 'processedByAdmin'])
-                                           ->orderBy('created_at', 'asc')
-                                           ->get();
-            
             // Riwayat ajuan divisinya
             $riwayatAjuan = AjuanStokDivisi::where('divisi_id', $user->divisi_id)
-                                          ->whereIn('status', ['reapproved_kabag', 'completed', 'rejected'])
-                                          ->with(['divisi', 'stokPusat', 'pengaju'])
-                                          ->orderBy('created_at', 'desc')
-                                          ->paginate(10);
-                                          
-        } elseif (in_array($user->role, ['admin', 'aset'])) {
-            // Admin melihat ajuan yang sudah diloloskan GA untuk diinput stoknya
-            $ajuansPending = AjuanStokDivisi::where('status', 'checked_ga')
-                                           ->with(['divisi', 'stokPusat', 'pengaju', 'approvedByKabag', 'approvedByGA'])
-                                           ->orderBy('created_at', 'asc')
-                                           ->get();
-                                           
-            // Riwayat ajuan yang sudah di-input Admin
-            $riwayatAjuan = AjuanStokDivisi::whereIn('status', ['processed_admin', 'reapproved_kabag', 'completed', 'rejected'])
+                                          ->whereIn('status', ['checked_kabag', 'completed', 'rejected'])
                                           ->with(['divisi', 'stokPusat', 'pengaju'])
                                           ->orderBy('created_at', 'desc')
                                           ->paginate(10);
         }
         
-        return view('admin.ajuan.approval-page', compact('ajuansPending', 'ajuansPending2', 'riwayatAjuan'));
+        return view('admin.ajuan.approval-page', compact('ajuansPending', 'riwayatAjuan'));
+    }
+
+    public function prosesApprovalSemua(Request $request)
+    {
+        $user = Auth::user();
+        
+        if (!in_array($user->role, ['ga', 'kabag'])) {
+            return response()->json(['success' => false, 'message' => 'Akses ditolak'], 403);
+        }
+        
+        try {
+            DB::beginTransaction();
+            $count = 0;
+            
+            if ($user->role === 'kabag') {
+                $ajuans = AjuanStokDivisi::where('status', 'pending')
+                    ->where('divisi_id', $user->divisi_id)
+                    ->get();
+                    
+                foreach ($ajuans as $ajuan) {
+                    $ajuan->update([
+                        'status' => 'checked_kabag',
+                        'approved_by_kabag' => $user->id,
+                        'approved_at_kabag' => now(),
+                    ]);
+                    $count++;
+                }
+            } elseif ($user->role === 'ga') {
+                $ajuans = AjuanStokDivisi::where('status', 'checked_kabag')
+                    ->with('stokPusat')
+                    ->get();
+                    
+                foreach ($ajuans as $ajuan) {
+                    if ($ajuan->stokPusat->sisa_stok < $ajuan->jumlah_diminta) {
+                        continue; // Skip if stock is not enough
+                    }
+                    
+                    $ajuan->update([
+                        'status' => 'completed',
+                        'completed_at' => now(),
+                        'jumlah_diberikan' => $ajuan->jumlah_diminta,
+                        'approved_by_ga' => $user->id,
+                        'approved_at_ga' => now(),
+                    ]);
+                    
+                    $ajuan->stokPusat->decrement('sisa_stok', $ajuan->jumlah_diminta);
+                    
+                    $stokDivisi = StokDivisi::where('divisi_id', $ajuan->divisi_id)
+                        ->where('stok_pusat_id', $ajuan->stok_pusat_id)
+                        ->first();
+                    
+                    if ($stokDivisi) {
+                        $stokDivisi->increment('sisa_stok', $ajuan->jumlah_diminta);
+                    } else {
+                        StokDivisi::create([
+                            'divisi_id' => $ajuan->divisi_id,
+                            'stok_pusat_id' => $ajuan->stok_pusat_id,
+                            'sisa_stok' => $ajuan->jumlah_diminta,
+                            'stok_ideal' => 0
+                        ]);
+                    }
+                    $count++;
+                }
+            }
+            
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => "Berhasil menyetujui $count ajuan sekaligus."
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error in prosesApprovalSemua: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memproses.'
+            ], 500);
+        }
     }
 
     public function prosesApproval(Request $request)
     {
         $user = Auth::user();
         
-        if (!in_array($user->role, ['ga', 'kabag', 'admin', 'aset'])) {
+        if (!in_array($user->role, ['ga', 'kabag'])) {
             return response()->json([
                 'success' => false,
                 'message' => 'Akses ditolak'
             ], 403);
         }
         
-        // Validasi berbeda berdasarkan role
-        $rules = [
+        $validator = Validator::make($request->all(), [
             'ajuan_id' => 'required|exists:ajuan_stok_divisis,id',
-            'action' => 'required|in:approve,reject,input',
+            'action' => 'required|in:approve,reject',
             'keterangan' => 'nullable|string|max:500',
-        ];
-        
-        // Hanya Admin yang perlu input jumlah_diberikan
-        if (in_array($user->role, ['admin', 'aset']) && $request->action === 'input') {
-            $rules['jumlah_diberikan'] = 'required|integer|min:1';
-        }
-        
-        $validator = Validator::make($request->all(), $rules);
+        ]);
         
         if ($validator->fails()) {
             return response()->json([
@@ -213,17 +257,8 @@ class AjuanStokDivisiController extends Controller
             $action = $request->action;
             $message = '';
             
-            // Rejection logic for all roles
             if ($action === 'reject') {
-                $keteranganField = 'alasan_reject';
-                if ($user->role === 'kabag') {
-                    if ($ajuan->status === 'pending') $keteranganField = 'keterangan_kabag';
-                    else if ($ajuan->status === 'processed_admin') $keteranganField = 'keterangan_kabag_2';
-                } elseif ($user->role === 'ga') {
-                    $keteranganField = 'keterangan_ga';
-                } elseif (in_array($user->role, ['admin', 'aset'])) {
-                    $keteranganField = 'keterangan_admin';
-                }
+                $keteranganField = $user->role === 'kabag' ? 'keterangan_kabag' : 'keterangan_ga';
                 
                 $ajuan->update([
                     'status' => 'rejected',
@@ -240,46 +275,25 @@ class AjuanStokDivisiController extends Controller
                 ]);
             }
             
-            // Approval Logic based on role and stage
             if ($user->role === 'kabag') {
                 if ($ajuan->divisi_id !== $user->divisi_id) {
                     return response()->json(['success' => false, 'message' => 'Anda tidak dapat memproses ajuan divisi lain'], 403);
                 }
                 
                 if ($ajuan->status === 'pending') {
-                    // Tahap 1: Approve Kabag 1
                     $ajuan->update([
                         'status' => 'checked_kabag',
                         'approved_by_kabag' => $user->id,
                         'approved_at_kabag' => now(),
                         'keterangan_kabag' => $request->keterangan,
                     ]);
-                    $message = 'Ajuan berhasil diverifikasi Kabag. Menunggu Rapat Anggaran GA.';
-                } elseif ($ajuan->status === 'processed_admin') {
-                    // Tahap 4: Re-approve Kabag
-                    $ajuan->update([
-                        'status' => 'reapproved_kabag',
-                        'reapproved_by_kabag' => $user->id,
-                        'reapproved_at_kabag' => now(),
-                        'keterangan_kabag_2' => $request->keterangan,
-                    ]);
-                    $message = 'Hasil inputan berhasil diverifikasi Kabag. Menunggu Finalisasi GA.';
+                    $message = 'Ajuan berhasil diverifikasi Kabag. Menunggu Persetujuan GA.';
                 } else {
                     return response()->json(['success' => false, 'message' => 'Status ajuan tidak valid untuk diproses Kabag'], 422);
                 }
             } elseif ($user->role === 'ga') {
                 if ($ajuan->status === 'checked_kabag') {
-                    // Tahap 2: Lolos GA
-                    $ajuan->update([
-                        'status' => 'checked_ga',
-                        'approved_by_ga' => $user->id,
-                        'approved_at_ga' => now(),
-                        'keterangan_ga' => $request->keterangan,
-                    ]);
-                    $message = 'Ajuan lolos Rapat GA. Menunggu inputan Admin.';
-                } elseif ($ajuan->status === 'reapproved_kabag') {
-                    // Tahap 5: Finalisasi GA (Transfer Stok)
-                    if ($ajuan->stokPusat->sisa_stok < $ajuan->jumlah_diberikan) {
+                    if ($ajuan->stokPusat->sisa_stok < $ajuan->jumlah_diminta) {
                         return response()->json([
                             'success' => false,
                             'message' => 'Stok pusat tidak mencukupi. Tersedia: ' . $ajuan->stokPusat->sisa_stok . ' ' . $ajuan->stokPusat->satuan
@@ -289,55 +303,34 @@ class AjuanStokDivisiController extends Controller
                     DB::transaction(function () use ($ajuan, $user, $request) {
                         $ajuan->update([
                             'status' => 'completed',
-                            'completed_at' => now()
+                            'approved_by_ga' => $user->id,
+                            'approved_at_ga' => now(),
+                            'keterangan_ga' => $request->keterangan,
+                            'completed_at' => now(),
+                            'jumlah_diberikan' => $ajuan->jumlah_diminta
                         ]);
                         
-                        // Kurangi stok pusat
-                        $ajuan->stokPusat->decrement('sisa_stok', $ajuan->jumlah_diberikan);
+                        $ajuan->stokPusat->decrement('sisa_stok', $ajuan->jumlah_diminta);
                         
-                        // Tambah atau update stok divisi
                         $stokDivisi = StokDivisi::where('divisi_id', $ajuan->divisi_id)
                                                ->where('stok_pusat_id', $ajuan->stok_pusat_id)
                                                ->first();
                         
                         if ($stokDivisi) {
-                            $stokDivisi->increment('sisa_stok', $ajuan->jumlah_diberikan);
+                            $stokDivisi->increment('sisa_stok', $ajuan->jumlah_diminta);
                         } else {
                             StokDivisi::create([
                                 'divisi_id' => $ajuan->divisi_id,
                                 'stok_pusat_id' => $ajuan->stok_pusat_id,
-                                'sisa_stok' => $ajuan->jumlah_diberikan,
-                                'stok_ideal' => 0 // Bisa diatur kemudian
+                                'sisa_stok' => $ajuan->jumlah_diminta,
+                                'stok_ideal' => 0
                             ]);
                         }
                     });
                     
-                    $message = 'Finalisasi berhasil. Stok sebanyak ' . $ajuan->jumlah_diberikan . ' ' . $ajuan->stokPusat->satuan . ' telah ditransfer ke divisi ' . $ajuan->divisi->divisi . '.';
+                    $message = 'Ajuan disetujui. Stok sebanyak ' . $ajuan->jumlah_diminta . ' ' . $ajuan->stokPusat->satuan . ' telah ditransfer ke divisi.';
                 } else {
                     return response()->json(['success' => false, 'message' => 'Status ajuan tidak valid untuk diproses GA'], 422);
-                }
-            } elseif (in_array($user->role, ['admin', 'aset'])) {
-                if ($ajuan->status === 'checked_ga' && $action === 'input') {
-                    // Tahap 3: Input Admin
-                    $jumlahDiberikan = $request->jumlah_diberikan;
-                    
-                    if ($jumlahDiberikan > $ajuan->stokPusat->sisa_stok) {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'Jumlah yang diberikan melebihi stok yang tersedia di pusat (' . $ajuan->stokPusat->sisa_stok . ')'
-                        ], 422);
-                    }
-                    
-                    $ajuan->update([
-                        'status' => 'processed_admin',
-                        'processed_by_admin' => $user->id,
-                        'processed_at_admin' => now(),
-                        'keterangan_admin' => $request->keterangan,
-                        'jumlah_diberikan' => $jumlahDiberikan
-                    ]);
-                    $message = 'Data berhasil diinput Admin. Menunggu verifikasi ulang Kabag.';
-                } else {
-                    return response()->json(['success' => false, 'message' => 'Status ajuan tidak valid atau action salah untuk diproses Admin'], 422);
                 }
             }
             
@@ -397,7 +390,6 @@ class AjuanStokDivisiController extends Controller
     {
         $timeline = [];
         
-        // 1. Pengajuan
         $timeline[] = [
             'title' => 'Pengajuan Dibuat',
             'description' => 'Ajuan stok dibuat oleh ' . ($ajuan->pengaju->name ?? '-'),
@@ -406,10 +398,9 @@ class AjuanStokDivisiController extends Controller
             'icon' => 'bi-file-plus'
         ];
         
-        // Tahap 1: Verifikasi Kabag
         if ($ajuan->approved_at_kabag) {
             $timeline[] = [
-                'title' => 'Verifikasi Kabag Selesai',
+                'title' => 'Disetujui Kabag',
                 'description' => 'Disetujui oleh ' . ($ajuan->approvedByKabag->name ?? 'Kabag'),
                 'date' => $ajuan->approved_at_kabag,
                 'status' => 'completed',
@@ -418,7 +409,7 @@ class AjuanStokDivisiController extends Controller
         } elseif ($ajuan->status === 'rejected' && $ajuan->rejected_by && !$ajuan->approved_at_kabag) {
             $timeline[] = [
                 'title' => 'Ditolak oleh Kabag',
-                'description' => 'Ajuan ditolak di tahap awal',
+                'description' => 'Ajuan ditolak oleh Kabag',
                 'date' => $ajuan->rejected_at,
                 'status' => 'rejected',
                 'icon' => 'bi-x-circle'
@@ -426,8 +417,8 @@ class AjuanStokDivisiController extends Controller
             return $timeline;
         } else {
             $timeline[] = [
-                'title' => 'Menunggu Verifikasi Kabag',
-                'description' => 'Ajuan sedang menunggu persetujuan Kabag',
+                'title' => 'Menunggu Persetujuan Kabag',
+                'description' => 'Menunggu persetujuan Kabag',
                 'date' => null,
                 'status' => 'pending',
                 'icon' => 'bi-clock'
@@ -437,106 +428,27 @@ class AjuanStokDivisiController extends Controller
 
         if ($ajuan->status === 'rejected') return $timeline;
 
-        // Tahap 2: Rapat GA
-        if ($ajuan->approved_at_ga) {
+        if ($ajuan->completed_at) {
             $timeline[] = [
-                'title' => 'Lolos Rapat GA',
-                'description' => 'Ajuan diloloskan oleh ' . ($ajuan->approvedByGA->name ?? 'GA'),
-                'date' => $ajuan->approved_at_ga,
-                'status' => 'completed',
-                'icon' => 'bi-people'
-            ];
-        } elseif ($ajuan->status === 'rejected' && !$ajuan->approved_at_ga) {
-            $timeline[] = [
-                'title' => 'Ditolak di Rapat GA',
-                'description' => 'Ajuan dibatalkan setelah rapat',
-                'date' => $ajuan->rejected_at,
-                'status' => 'rejected',
-                'icon' => 'bi-x-circle'
-            ];
-            return $timeline;
-        } else {
-            $timeline[] = [
-                'title' => 'Menunggu Rapat GA',
-                'description' => 'Ajuan sedang dalam tahap rapat anggaran',
-                'date' => null,
-                'status' => 'pending',
-                'icon' => 'bi-clock'
-            ];
-            return $timeline;
-        }
-
-        // Tahap 3: Input Admin
-        if ($ajuan->processed_at_admin) {
-            $timeline[] = [
-                'title' => 'Input Stok Admin',
-                'description' => 'Admin menargetkan realisasi sejumlah ' . $ajuan->jumlah_diberikan,
-                'date' => $ajuan->processed_at_admin,
-                'status' => 'completed',
-                'icon' => 'bi-keyboard'
-            ];
-        } elseif ($ajuan->status === 'rejected' && !$ajuan->processed_at_admin) {
-            $timeline[] = [
-                'title' => 'Ditolak Admin',
-                'description' => 'Ajuan ditolak',
-                'date' => $ajuan->rejected_at,
-                'status' => 'rejected',
-                'icon' => 'bi-x-circle'
-            ];
-            return $timeline;
-        } else {
-            $timeline[] = [
-                'title' => 'Menunggu Input Admin',
-                'description' => 'Menunggu perincian stok dari admin',
-                'date' => null,
-                'status' => 'pending',
-                'icon' => 'bi-clock'
-            ];
-            return $timeline;
-        }
-
-        // Tahap 4: Re-Approve Kabag
-        if ($ajuan->reapproved_at_kabag) {
-            $timeline[] = [
-                'title' => 'Verifikasi Ulang Kabag',
-                'description' => 'Kabag menyetujui rincian admin',
-                'date' => $ajuan->reapproved_at_kabag,
+                'title' => 'Disetujui GA & Selesai',
+                'description' => 'Disetujui GA, stok telah ditransfer.',
+                'date' => $ajuan->completed_at,
                 'status' => 'completed',
                 'icon' => 'bi-check-all'
             ];
-        } elseif ($ajuan->status === 'rejected' && !$ajuan->reapproved_at_kabag) {
+        } elseif ($ajuan->status === 'rejected' && !$ajuan->approved_at_ga) {
             $timeline[] = [
-                'title' => 'Ditolak Kabag Tahap 2',
-                'description' => 'Hasil input admin tidak disetujui Kabag',
+                'title' => 'Ditolak oleh GA',
+                'description' => 'Ajuan ditolak oleh GA',
                 'date' => $ajuan->rejected_at,
                 'status' => 'rejected',
                 'icon' => 'bi-x-circle'
             ];
             return $timeline;
         } else {
-            $timeline[] = [
-                'title' => 'Menunggu Verifikasi Ulang Kabag',
-                'description' => 'Menunggu persetujuan ulang Kabag untuk rincian stok',
-                'date' => null,
-                'status' => 'pending',
-                'icon' => 'bi-clock'
-            ];
-            return $timeline;
-        }
-
-        // Tahap 5: Final
-        if ($ajuan->completed_at) {
-            $timeline[] = [
-                'title' => 'Finalisasi Selesai',
-                'description' => 'Stok telah dipotong dan direalisasikan',
-                'date' => $ajuan->completed_at,
-                'status' => 'completed',
-                'icon' => 'bi-flag-fill'
-            ];
-        } else {
              $timeline[] = [
-                'title' => 'Menunggu Finalisasi GA',
-                'description' => 'Menunggu proses akhir dan eksekusi stok oleh GA',
+                'title' => 'Menunggu Persetujuan GA',
+                'description' => 'Menunggu persetujuan dan eksekusi stok oleh GA',
                 'date' => null,
                 'status' => 'pending',
                 'icon' => 'bi-clock'

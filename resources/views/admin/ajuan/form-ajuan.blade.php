@@ -263,8 +263,12 @@ $user = Auth::user();
                         showToast('success', 'Berhasil!', response.message);
                         
                         // Pastikan response memiliki data ajuan
-                        if (response.ajuan && response.ajuan.stok_pusat) {
+                        if (response.ajuan && (response.ajuan.stok_pusat || response.ajuan.stokPusat)) {
                             const newAjuan = response.ajuan;
+                            // Normalisasi key stok_pusat
+                            if (!newAjuan.stok_pusat && newAjuan.stokPusat) {
+                                newAjuan.stok_pusat = newAjuan.stokPusat;
+                            }
                             
                             console.log('Data ajuan baru:', newAjuan);
                             
