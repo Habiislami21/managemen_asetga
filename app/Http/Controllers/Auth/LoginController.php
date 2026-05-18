@@ -52,7 +52,7 @@ class LoginController extends Controller
     public function redirectPath()
     {
         // Check for user role and redirect accordingly
-        if (Auth::user() && Auth::user()->isKabag()) {
+        if (Auth::user() && (Auth::user()->isKabag() || Auth::user()->isPjDivisi())) {
             return '/admin/ajuan-rutin';
         }
         

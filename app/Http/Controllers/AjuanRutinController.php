@@ -77,6 +77,116 @@ class AjuanRutinController extends Controller
             return back()->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());
         }
     }
+
+    public function editBatch(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'pj_divisi') {
+            return redirect()->route('admin.ajuan-rutin')->with('error', 'Akses ditolak.');
+        }
+
+        $namaSpa = $request->query('nama_spa');
+        $tanggalAjuan = $request->query('tanggal_ajuan');
+        $divisiId = $request->query('divisi_id');
+
+        if (!$namaSpa || !$tanggalAjuan || !$divisiId) {
+            return redirect()->route('admin.ajuan-rutin')->with('error', 'Parameter tidak lengkap.');
+        }
+
+        if (strlen($tanggalAjuan) > 10) {
+            $items = AjuanRutin::where('nama_spa', $namaSpa)
+                ->where('divisi_id', $divisiId)
+                ->where('created_at', $tanggalAjuan)
+                ->get();
+        } else {
+            $items = AjuanRutin::where('nama_spa', $namaSpa)
+                ->where('divisi_id', $divisiId)
+                ->whereDate('created_at', $tanggalAjuan)
+                ->get();
+        }
+
+        if ($items->isEmpty()) {
+            return redirect()->route('admin.ajuan-rutin')->with('error', 'Data tidak ditemukan.');
+        }
+
+        if ($items->first()->status !== 'buat ulang') {
+            return redirect()->route('admin.ajuan-rutin')->with('error', 'Hanya ajuan dengan status "buat ulang" yang dapat diedit.');
+        }
+
+        $divisis = Divisi::all();
+        $satuan = AjuanRutin::SATUAN ?? ['pcs', 'pack', 'kg', 'rim', 'kotak', 'bungkus', 'botol', 'dus', 'lusin', 'set', 'bulan'];
+
+        return view('form.edit-ajuan-rutin', compact('items', 'divisis', 'satuan', 'namaSpa', 'tanggalAjuan', 'divisiId'));
+    }
+
+    public function updateBatch(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'pj_divisi') {
+            return redirect()->route('admin.ajuan-rutin')->with('error', 'Akses ditolak.');
+        }
+
+        $validated = $request->validate([
+            'old_nama_spa' => 'required|string',
+            'old_tanggal_ajuan' => 'required|string',
+            'old_divisi_id' => 'required|integer',
+            'nama_spa' => 'required|string|max:255',
+            'divisi_id' => 'required|exists:divisis,id',
+            'nomor_telp' => 'required|string|max:15',
+            'total_amount' => 'required|numeric|min:0',
+            'items' => 'required|array|min:1',
+            'items.*.barang_ajuan' => 'required|string|max:255',
+            'items.*.kategori_barang' => 'required|string|max:255',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $oldNamaSpa = $request->old_nama_spa;
+            $oldTanggalAjuan = $request->old_tanggal_ajuan;
+            $oldDivisiId = $request->old_divisi_id;
+
+            if (strlen($oldTanggalAjuan) > 10) {
+                AjuanRutin::where('nama_spa', $oldNamaSpa)
+                    ->where('divisi_id', $oldDivisiId)
+                    ->where('created_at', $oldTanggalAjuan)
+                    ->delete();
+            } else {
+                AjuanRutin::where('nama_spa', $oldNamaSpa)
+                    ->where('divisi_id', $oldDivisiId)
+                    ->whereDate('created_at', $oldTanggalAjuan)
+                    ->delete();
+            }
+
+            $createdAt = strlen($oldTanggalAjuan) > 10 ? Carbon::parse($oldTanggalAjuan) : Carbon::now();
+
+            foreach ($request->items as $item) {
+                AjuanRutin::create([
+                    'nama_spa' => $request->nama_spa,
+                    'divisi_id' => $request->divisi_id,
+                    'nomor_telp' => $request->nomor_telp,
+                    'barang_ajuan' => $item['barang_ajuan'],
+                    'kategori_barang' => $item['kategori_barang'],
+                    'banyak_barang' => $item['banyak_barang'] ?? 1,
+                    'satuan' => $item['satuan'] ?? 'pcs',
+                    'harga' => $item['harga'] ?? 0,
+                    'total' => $item['total'] ?? 0,
+                    'keterangan' => $item['keterangan'] ?? '',
+                    'status' => 'pending',
+                    'created_at' => $createdAt,
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()->route('admin.ajuan-rutin')->with('success', 'Ajuan rutin berhasil diperbaiki dan status menjadi pending.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error updating ajuan rutin: '.$e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());
+        }
+    }
     
     public function ajuanRutin(Request $request)
     {

@@ -17,7 +17,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/login-admin', [AuthController::class, 'login'])->name('login-admin');
+Route::get('/login-admin', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login-admin');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::view('/parallax', 'parallax');
 Route::view('/menu-awal', 'display.menu-awal');
@@ -74,12 +74,17 @@ Route::get('/export-excel-ajuan', [AjuanController::class, 'exportExcel'])->name
 Route::post('/export-excel-divisi', [StokController::class, 'exportExcelDivisi'])->name('divisi.export');
 
 Route::get('/ajuan-rutin', [AjuanRutinController::class, 'index'])->name('ajuan-rutin');
-Route::resource('ajuan-rutin', AjuanRutinController::class);
-Route::get('/admin/ajuan-rutin', [AjuanRutinController::class, 'ajuanRutin'])->name('admin.ajuan-rutin');
-Route::post('/ajuan-rutin/update-status-batch', [AjuanRutinController::class, 'updateStatusBatch'])->name('ajuan-rutin.update-status-batch');
-Route::get('/ajuan-rutin/get-status/{namaSpa}', [AjuanRutinController::class, 'getStatusDetail'])->name('ajuan-rutin.get-status');
-Route::get('/admin/ajuan-rutin/export-approved', [AjuanRutinController::class, 'exportApproved'])->name('ajuan-rutin.export-approved');
-Route::post('/ajuan-rutin/delete-batch', [AjuanRutinController::class, 'deleteBatch'])->name('ajuan-rutin.delete-batch');
+Route::resource('ajuan-rutin', AjuanRutinController::class)->only(['index', 'create', 'store']);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/ajuan-rutin', [AjuanRutinController::class, 'ajuanRutin'])->name('admin.ajuan-rutin');
+    Route::post('/ajuan-rutin/update-status-batch', [AjuanRutinController::class, 'updateStatusBatch'])->name('ajuan-rutin.update-status-batch');
+    Route::get('/ajuan-rutin/get-status/{namaSpa}', [AjuanRutinController::class, 'getStatusDetail'])->name('ajuan-rutin.get-status');
+    Route::get('/admin/ajuan-rutin/export-approved', [AjuanRutinController::class, 'exportApproved'])->name('ajuan-rutin.export-approved');
+    Route::post('/ajuan-rutin/delete-batch', [AjuanRutinController::class, 'deleteBatch'])->name('ajuan-rutin.delete-batch');
+    Route::get('/ajuan-rutin/edit-batch', [AjuanRutinController::class, 'editBatch'])->name('ajuan-rutin.edit-batch');
+    Route::post('/ajuan-rutin/update-batch', [AjuanRutinController::class, 'updateBatch'])->name('ajuan-rutin.update-batch');
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/ajuan-final', [App\Http\Controllers\AjuanFinalController::class, 'index'])->name('admin.ajuan-final');

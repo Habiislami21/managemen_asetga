@@ -301,7 +301,7 @@ $currentUser = Auth::user();
             <div>
                 <h3 class="card-title mb-0">
                     @if($isPjDivisi)
-                        Progress Ajuan RutinS
+                        Progress Ajuan Rutin
                     @else
                         Daftar Ajuan Rutin
                     @endif
@@ -494,6 +494,14 @@ $currentUser = Auth::user();
                                             onclick="deleteAjuan('{{ $uniqueId }}', '{{ addslashes($ajuan->nama_spa) }}', '{{ $ajuan->tanggal_ajuan }}', {{ $ajuan->divisi_id ?? 'null' }})"></i>
                                         @endif
                                     @else
+                                        @if($ajuan->status == 'buat ulang')
+                                            <a href="{{ route('ajuan-rutin.edit-batch', ['nama_spa' => $ajuan->nama_spa, 'tanggal_ajuan' => $ajuan->tanggal_ajuan, 'divisi_id' => $ajuan->divisi_id]) }}" class="text-decoration-none">
+                                                <i class="fas fa-edit action-icon edit" 
+                                                data-bs-toggle="tooltip" 
+                                                data-bs-title="Perbaiki Ajuan"
+                                                style="color: #0d6efd; cursor: pointer; margin-left: 5px;"></i>
+                                            </a>
+                                        @endif
                                         <!-- Untuk PJ Divisi, tampilkan icon disabled -->
                                         <i class="fas fa-check-circle action-icon approve disabled-pj" 
                                         data-bs-toggle="tooltip" 
