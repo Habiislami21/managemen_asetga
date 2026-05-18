@@ -9,6 +9,7 @@ use App\Http\Controllers\AjuanStokDivisiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CekBulananController;
 use App\Http\Controllers\StokController;
+use App\Http\Controllers\BackupController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -124,6 +125,12 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:admin'])->group(function () {
         Route::post('/reset-cek-bulanan', [AjuanStokDivisiController::class, 'resetCekBulanan'])->name('reset.cek-bulanan');
         Route::get('/cek-bulanan/analytics', [AjuanStokDivisiController::class, 'getAnalytics'])->name('cek.bulanan.analytics');
+        
+        // Backup Database Routes
+        Route::get('/backup', [BackupController::class, 'index'])->name('admin.backup');
+        Route::post('/backup/create', [BackupController::class, 'create'])->name('admin.backup.create');
+        Route::get('/backup/download/{fileName}', [BackupController::class, 'download'])->name('admin.backup.download');
+        Route::delete('/backup/delete/{fileName}', [BackupController::class, 'delete'])->name('admin.backup.delete');
     });
 
     Route::middleware(['auth', 'role:admin,ga,aset'])->prefix('api')->group(function () {

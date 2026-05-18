@@ -107,6 +107,12 @@
                     </a>
                 </li>                        
                 <li class="sidebar-item">
+                    <a href="{{ route('admin.backup') }}" class='sidebar-link'>
+                        <i class="bi bi-database-fill-gear"></i>
+                        <span>Backup Database</span>
+                    </a>
+                </li>                        
+                <li class="sidebar-item">
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>

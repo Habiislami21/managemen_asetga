@@ -16,3 +16,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/*.rar
+/*.zip
+/storage/app/backups/
+/storage/app/backup-temp/
