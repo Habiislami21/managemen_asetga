@@ -23,6 +23,7 @@ class KendaraanSeeder extends Seeder
             ['nama' => 'X-Ride Wakaf', 'kategori' => 'R2'],
             ['nama' => 'CRF Wakaf', 'kategori' => 'R2'],
             ['nama' => 'CRF Paskas', 'kategori' => 'R2'],
+            ['nama' => 'Revo Wakaf', 'kategori' => 'R2'],
         ];
 
         foreach ($kendaraans as $kendaraan) {

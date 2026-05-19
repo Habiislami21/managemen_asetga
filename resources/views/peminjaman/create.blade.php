@@ -388,7 +388,7 @@
                     <label for="nomor_hp">Nomor HP (WhatsApp)</label>
                     <div class="input-with-icon">
                         <input type="tel" class="form-control @error('nomor_hp') is-invalid @enderror" 
-                               name="nomor_hp" id="nomor_hp" placeholder="Masukkan Nomor HP" 
+                               name="nomor_hp" id="nomor_hp" placeholder="Nomor HP : 0895xxxxxxx" 
                                value="{{ old('nomor_hp') }}" required>
                         <i class="fas fa-phone input-icon"></i>
                     </div>
