@@ -209,6 +209,15 @@ class AjuanStokDivisiController extends Controller
                             'stok_ideal' => 0
                         ]);
                     }
+                    
+                    // Reset progress cek bulanan divisi ke 0% karena ada barang baru masuk
+                    StokDivisi::where('divisi_id', $ajuan->divisi_id)->update([
+                        'status_cek_bulanan' => null,
+                        'stok_fisik_cek' => null,
+                        'tgl_cek_bulanan' => null,
+                        'dicek_oleh' => null,
+                        'keterangan_cek' => null
+                    ]);
                     $count++;
                 }
             }
@@ -326,6 +335,15 @@ class AjuanStokDivisiController extends Controller
                                 'stok_ideal' => 0
                             ]);
                         }
+
+                        // Reset progress cek bulanan divisi ke 0% karena ada barang baru masuk
+                        StokDivisi::where('divisi_id', $ajuan->divisi_id)->update([
+                            'status_cek_bulanan' => null,
+                            'stok_fisik_cek' => null,
+                            'tgl_cek_bulanan' => null,
+                            'dicek_oleh' => null,
+                            'keterangan_cek' => null
+                        ]);
                     });
                     
                     $message = 'Ajuan disetujui. Stok sebanyak ' . $ajuan->jumlah_diminta . ' ' . $ajuan->stokPusat->satuan . ' telah ditransfer ke divisi.';

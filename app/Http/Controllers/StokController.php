@@ -332,6 +332,15 @@ class StokController extends Controller
             $stokPusat->save();
             $stokDivisi->save();
             
+            // Reset progress cek bulanan divisi ke 0% karena ada barang baru masuk
+            StokDivisi::where('divisi_id', $stokDivisi->divisi_id)->update([
+                'status_cek_bulanan' => null,
+                'stok_fisik_cek' => null,
+                'tgl_cek_bulanan' => null,
+                'dicek_oleh' => null,
+                'keterangan_cek' => null
+            ]);
+            
             return response()->json([
                 'message' => 'Stok berhasil ditambahkan dari pusat.',
                 'stok_divisi' => $stokDivisi
