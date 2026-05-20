@@ -1,13 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BMIPusat-Aset Online</title>
+    <title>BMIPusat - Asset & General Affair</title>
     <link rel="shortcut icon" href="{{ asset('img/logo2024.png') }}" type="image/x-icon">
+    
+    <!-- Tailwind CSS with custom configuration -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- External Icon & Typography libraries -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         html {
             scroll-behavior: smooth;
@@ -15,623 +32,746 @@
         
         body {
             font-family: 'Poppins', sans-serif;
+            background-color: #020617;
             margin: 0;
             overflow-x: hidden;
         }
         
-        /* Enhanced Parallax Effect */
-        .parallax-section {
-            position: relative;
-            min-height: 100vh;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #059669;
         }
         
-        .parallax-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 120%;
-            background-size: cover;
-            background-position: center;
-            transition: all 0.5s ease;
-            z-index: -1;
+        /* Elegant Glassmorphism Cards */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+        
+        .glass-card {
+            background: rgba(15, 23, 42, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-card:hover {
+            background: rgba(16, 185, 129, 0.06);
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.08);
+            transform: translateY(-8px);
+        }
+        
+        /* Typewriter Cursor Glow */
+        .typewriter-cursor::after {
+            content: '|';
+            color: #10b981;
+            animation: blink 0.8s step-end infinite;
+        }
+        
+        @keyframes blink {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        /* Scroll Reveal Animation Styling */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal-item.active {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         /* Floating Animation */
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-12px); }
         }
         
-        .float-animation {
+        .float-slow {
             animation: float 6s ease-in-out infinite;
         }
         
-        /* Typing Animation */
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
+        /* Custom Navigation Dots */
+        .side-dot {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .side-dot.active {
+            background-color: #10b981;
+            box-shadow: 0 0 12px #10b981;
+            transform: scale(1.4);
         }
         
-        @keyframes blink {
-            50% { border-color: transparent; }
-        }
-        
-        .typewriter {
-            border-right: 3px solid white;
-            overflow: hidden;
-            white-space: nowrap;
-            animation: 
-                typing 4s steps(40, end),
-                blink 0.5s step-end infinite alternate;
-        }
-        
-        /* Pulse Effect */
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        .pulse-animation {
-            animation: pulse 2s infinite;
-        }
-        
-        /* Hover Effect Enhancement */
-        .team-card {
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .team-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .team-card:hover::before {
-            left: 100%;
-        }
-        
-        .team-card:hover {
-            transform: translateY(-15px) scale(1.05);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-        
-        /* Navigation Dots Enhancement */
-        .nav-dots {
-            position: fixed;
-            right: 2rem;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 100;
-        }
-        
-        .nav-dot {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.5);
-            margin: 1rem 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .nav-dot::after {
-            content: '';
-            position: absolute;
-            left: -10px;
-            top: -10px;
-            width: 35px;
-            height: 35px;
-            border: 2px solid transparent;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-dot.active {
-            background-color: #3b82f6;
-            transform: scale(1.5);
-        }
-        
-        .nav-dot.active::after {
-            border-color: rgba(59, 130, 246, 0.3);
-        }
-        
-        /* Enhanced Gallery */
-        .gallery-container {
-            position: relative;
-            perspective: 1000px;
-        }
-        
+        /* Smooth Slide Transition */
         .slide {
-            transform-style: preserve-3d;
-            transition: all 0.8s ease;
+            transition: opacity 0.8s ease-in-out;
         }
-        
-        .slide.active {
-            animation: slideIn 0.8s ease-out;
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8) rotateY(30deg);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) rotateY(0deg);
-            }
-        }
-        
-        /* Progress Bar Animation */
-        .progress-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            height: 4px;
-            background-color: #3b82f6;
-            animation: progress 5s linear infinite;
-        }
-        
-        @keyframes progress {
-            from { width: 0%; }
-            to { width: 100%; }
-        }
-        
-        /* Section Title Enhancement */
-        .section-title {
-            position: relative;
-            display: inline-block;
-            overflow: hidden;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-            animation: expandWidth 2s ease-out forwards;
-        }
-        
-        @keyframes expandWidth {
-            to { width: 100%; }
-        }
-        
-        /* Scroll Reveal Animation */
-        .scroll-reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease;
-        }
-        
-        .scroll-reveal.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* Loading Screen */
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3b82f6;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .team-container {
-                flex-direction: column;
-            }
-            .parallax-section {
-                min-height: auto;
-                padding: 2rem 0;
-            }
-            .nav-dots {
-                display: none;
-            }
+        .slide-dot {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
     </style>
 </head>
-<body>
+<body class="text-slate-100 selection:bg-emerald-500 selection:text-white">
+
     <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="loader"></div>
-        <p class="text-white mt-4">Loading...</p>
+    <div id="loading-screen" class="fixed inset-0 bg-slate-950 z-[9999] flex flex-col items-center justify-center transition-all duration-1000">
+        <div class="relative flex items-center justify-center">
+            <!-- Outer Glowing Ring -->
+            <div class="animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-emerald-500"></div>
+            <!-- Inner Ring -->
+            <div class="animate-spin rounded-full h-16 w-16 border-r-2 border-l-2 border-teal-400 absolute duration-[1500ms]" style="animation-direction: reverse;"></div>
+            <!-- Central Leaf Icon -->
+            <i class="fas fa-leaf text-2xl text-emerald-400 absolute animate-pulse"></i>
+        </div>
+        <h2 class="text-white text-2xl font-outfit font-semibold mt-8 tracking-wider">BMIPusat-Aset</h2>
+        <p class="text-emerald-400/80 text-sm font-poppins mt-2 animate-pulse">Mengharmonisasikan Operasional dengan Alam...</p>
     </div>
-    
-    <!-- Navigation Dots -->
-    <div class="nav-dots">
-        <div class="nav-dot active" data-section="headline" title="Home"></div>
-        <div class="nav-dot" data-section="tim-inti" title="Tim Inti"></div>
+
+    <!-- Video Background Container -->
+    <div id="video-container" class="fixed inset-0 w-full h-full overflow-hidden z-[-2] pointer-events-none bg-cover bg-center transition-all duration-1000" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80')">
+        <!-- Overlay for better text readability -->
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950/85 via-slate-950/65 to-slate-950/95 z-[1]"></div>
+        <!-- Soft green organic glow effects -->
+        <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-emerald-500/8 blur-[130px] pointer-events-none z-[1]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-teal-500/8 blur-[130px] pointer-events-none z-[1]"></div>
+        
+        <!-- Video Element -->
+        <video id="bg-video" autoplay loop muted playsinline class="w-full h-full object-cover scale-[1.02] filter brightness-[0.75] contrast-[1.05] transition-all duration-1000">
+            <source id="video-source" src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4" type="video/mp4">
+        </video>
     </div>
-    
-    <!-- Headline Section -->
-    <section id="headline" class="parallax-section">
-        <div id="headline-background" class="parallax-bg"></div>
-        <div class="content-container">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto">
-                <!-- Left Side - Enhanced Gallery -->
-                <div class="flex items-center justify-center float-animation">
-                    <div class="relative w-full max-w-2xl">
-                        <!-- Gallery Background with Enhanced Blur -->
-                        <div id="gallery-blur-bg" class="absolute inset-0 bg-cover bg-center rounded-lg" 
-                             style="filter: blur(12px); 
-                                    opacity: 0.5;
-                                    transform: scale(1.1);
-                                    transition: all 1s ease-in-out;"></div>
+
+    <!-- Transition Overlay for Video Switching -->
+    <div id="video-fade-overlay" class="fixed inset-0 bg-slate-950 opacity-0 z-[-1] pointer-events-none transition-opacity duration-500"></div>
+
+    <!-- Floating Atmosphere Controller -->
+    <div class="fixed bottom-6 left-6 z-50 bg-slate-950/75 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl transition-all duration-300 hover:border-emerald-500/30 w-[280px] sm:w-[320px] group">
+        <div class="flex items-center justify-between mb-3 px-1">
+            <div class="flex items-center space-x-2 text-emerald-400">
+                <i class="fas fa-sliders-h animate-pulse"></i>
+                <span class="text-xs font-semibold tracking-wider uppercase font-outfit">Suasana Alam</span>
+            </div>
+            <button id="btn-play-pause" class="text-white hover:text-emerald-400 transition-colors text-xs px-2 py-1 rounded bg-white/5 flex items-center space-x-1" title="Play/Pause Background Video">
+                <i class="fas fa-pause" id="play-pause-icon"></i>
+                <span id="play-pause-text" class="text-[10px]">Pause</span>
+            </button>
+        </div>
+        
+        <div class="space-y-1.5">
+            <button onclick="changeAtmosphere('stream', this)" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-white text-xs text-left transition-all hover:bg-emerald-500/30 font-medium atmosphere-btn">
+                <span class="flex items-center space-x-2 whitespace-nowrap">
+                    <i class="fas fa-water text-emerald-400"></i>
+                    <span>Aliran Sungai Rindang</span>
+                </span>
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            </button>
+            <button onclick="changeAtmosphere('mist', this)" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-slate-300 text-xs text-left transition-all hover:bg-slate-800/80 hover:text-white atmosphere-btn">
+                <span class="flex items-center space-x-2 whitespace-nowrap">
+                    <i class="fas fa-cloud-sun-rain"></i>
+                    <span>Lembah Kabut Sunyi</span>
+                </span>
+                <span class="w-2 h-2 rounded-full bg-transparent"></span>
+            </button>
+            <button onclick="changeAtmosphere('waterfall', this)" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-slate-900/60 border border-white/5 text-slate-300 text-xs text-left transition-all hover:bg-slate-800/80 hover:text-white atmosphere-btn">
+                <span class="flex items-center space-x-2 whitespace-nowrap">
+                    <i class="fas fa-mountain"></i>
+                    <span>Air Terjun Hijau</span>
+                </span>
+                <span class="w-2 h-2 rounded-full bg-transparent"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating Glassmorphic Header -->
+    <header class="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-7xl z-50 bg-slate-950/40 backdrop-blur-xl border border-white/10 rounded-2xl px-6 py-3 shadow-2xl transition-all duration-300 hover:border-emerald-500/20">
+        <div class="flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-3 group">
+                <img src="{{ asset('img/logo2024.png') }}" alt="BMI Logo" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+                <div>
+                    <span class="text-white font-outfit font-bold text-sm tracking-wide block leading-none">BMI PUSAT</span>
+                    <span class="text-emerald-400 font-poppins text-xs block mt-1 tracking-wider uppercase font-semibold">Asset & General Affair</span>
+                </div>
+            </a>
+            
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#headline" class="text-white/80 hover:text-emerald-400 transition-colors font-medium text-sm font-poppins relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-emerald-400 after:transition-all hover:after:w-full">Beranda</a>
+                <a href="#apa-yang-kami-lakukan" class="text-white/80 hover:text-emerald-400 transition-colors font-medium text-sm font-poppins relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-emerald-400 after:transition-all hover:after:w-full">Layanan</a>
+                <a href="#tim-inti" class="text-white/80 hover:text-emerald-400 transition-colors font-medium text-sm font-poppins relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-emerald-400 after:transition-all hover:after:w-full">Tim Kami</a>
+            </nav>
+            
+            <div class="flex items-center space-x-4">
+                <a href="#tim-inti" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-outfit text-xs font-semibold py-2.5 px-5 rounded-xl transition-all hover:scale-105 hover:shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                    Hubungi Tim
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Side Navigation Dots -->
+    <div class="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col space-y-4 bg-slate-950/40 backdrop-blur-xl border border-white/10 py-4 px-2.5 rounded-full shadow-2xl">
+        <a href="#headline" class="side-dot w-3 h-3 rounded-full bg-white/30 hover:bg-emerald-400 active" data-section="headline" title="Beranda"></a>
+        <a href="#apa-yang-kami-lakukan" class="side-dot w-3 h-3 rounded-full bg-white/30 hover:bg-emerald-400" data-section="apa-yang-kami-lakukan" title="Layanan"></a>
+        <a href="#tim-inti" class="side-dot w-3 h-3 rounded-full bg-white/30 hover:bg-emerald-400" data-section="tim-inti" title="Tim Inti"></a>
+    </div>
+
+    <!-- Hero / Headline Section -->
+    <section id="headline" class="min-height-[100vh] pt-32 pb-20 px-4 md:px-8 flex items-center justify-center relative overflow-hidden">
+        <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+            
+            <!-- Left Side - Glassmorphic Gallery Slideshow -->
+            <div class="lg:col-span-6 flex justify-center float-slow">
+                <div class="relative w-full max-w-lg glass-panel p-4 rounded-3xl overflow-hidden shadow-2xl border border-white/15">
+                    
+                    <!-- Blur-backdrop glow representing the slide -->
+                    <div id="gallery-blur-bg" class="absolute inset-0 bg-cover bg-center rounded-3xl opacity-20 filter blur-2xl scale-110 duration-1000 transition-all"></div>
+                    
+                    <!-- Custom Slideshow Container -->
+                    <div class="relative rounded-2xl overflow-hidden aspect-[4/3] group shadow-inner border border-white/10">
+                        <!-- Progress slider line -->
+                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-emerald-500/20 z-20">
+                            <div id="slide-progress" class="h-full bg-emerald-400 w-0"></div>
+                        </div>
+
+                        <!-- Slides -->
+                        <div class="relative w-full h-full" id="slideshow">
+                            <!-- Slide 1 -->
+                            <div class="slide absolute inset-0 w-full h-full opacity-100 duration-1000 transition-opacity">
+                                <img src="{{asset('img/galeri-3.jpeg')}}" alt="Asset Management System" class="w-full h-full object-cover">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent p-5 pt-12">
+                                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest block mb-1">Kegiatan</span>
+                                    <h3 class="text-white text-lg font-bold font-outfit">Outbound & Bounding</h3>
+                                    <p class="text-slate-300 text-xs mt-1">Mengokohkan kebersamaan dan sinergi tim di alam bebas.</p>
+                                </div>
+                            </div>
+                            <!-- Slide 2 -->
+                            <div class="slide absolute inset-0 w-full h-full opacity-0 hidden duration-1000 transition-opacity">
+                                <img src="{{asset('img/galeri-2.jpeg')}}" alt="Team Working" class="w-full h-full object-cover">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent p-5 pt-12">
+                                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest block mb-1">Rapat</span>
+                                    <h3 class="text-white text-lg font-bold font-outfit">Sesi Briefing</h3>
+                                    <p class="text-slate-300 text-xs mt-1">Perencanaan strategis demi alur operasional yang lancar.</p>
+                                </div>
+                            </div>
+                            <!-- Slide 3 -->
+                            <div class="slide absolute inset-0 w-full h-full opacity-0 hidden duration-1000 transition-opacity">
+                                <img src="{{asset('img/galeri-4.jpeg')}}" alt="Modern Equipment" class="w-full h-full object-cover">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent p-5 pt-12">
+                                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest block mb-1">Momen</span>
+                                    <h3 class="text-white text-lg font-bold font-outfit">Paskas Day</h3>
+                                    <p class="text-slate-300 text-xs mt-1">Berbagi dedikasi dan kontribusi nyata bagi umat.</p>
+                                </div>
+                            </div>
+                            <!-- Slide 4 -->
+                            <div class="slide absolute inset-0 w-full h-full opacity-0 hidden duration-1000 transition-opacity">
+                                <img src="{{asset('img/galeri-5.jpeg')}}" alt="Modern Equipment" class="w-full h-full object-cover">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent p-5 pt-12">
+                                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest block mb-1">Spritual</span>
+                                    <h3 class="text-white text-lg font-bold font-outfit">Kajian di Masjid</h3>
+                                    <p class="text-slate-300 text-xs mt-1">Mengisi nutrisi rohani agar bekerja senantiasa bernilai ibadah.</p>
+                                </div>
+                            </div>
+                            <!-- Slide 5 -->
+                            <div class="slide absolute inset-0 w-full h-full opacity-0 hidden duration-1000 transition-opacity">
+                                <img src="{{asset('img/galeri-6.jpeg')}}" alt="Modern Equipment" class="w-full h-full object-cover">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent p-5 pt-12">
+                                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest block mb-1">Koordinasi</span>
+                                    <h3 class="text-white text-lg font-bold font-outfit">After Briefing</h3>
+                                    <p class="text-slate-300 text-xs mt-1">Evaluasi cepat setelah koordinasi lapangan selesai dilaksanakan.</p>
+                                </div>
+                            </div>
+                            <!-- Slide 6 -->
+                            <div class="slide absolute inset-0 w-full h-full opacity-0 hidden duration-1000 transition-opacity">
+                                <img src="{{asset('img/galeri-7.jpeg')}}" alt="Modern Equipment" class="w-full h-full object-cover">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent p-5 pt-12">
+                                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest block mb-1">Ruang Kerja</span>
+                                    <h3 class="text-white text-lg font-bold font-outfit">Ruang Finance 1</h3>
+                                    <p class="text-slate-300 text-xs mt-1">Menata kenyamanan ruang keuangan agar fokus tetap terjaga.</p>
+                                </div>
+                            </div>
+                            <!-- Slide 7 -->
+                            <div class="slide absolute inset-0 w-full h-full opacity-0 hidden duration-1000 transition-opacity">
+                                <img src="{{asset('img/galeri-8.jpeg')}}" alt="Modern Equipment" class="w-full h-full object-cover">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent p-5 pt-12">
+                                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest block mb-1">Fasilitas</span>
+                                    <h3 class="text-white text-lg font-bold font-outfit">Ruang Finance 2</h3>
+                                    <p class="text-slate-300 text-xs mt-1">Dukungan tata ruang yang efisien dan ergonomis.</p>
+                                </div>
+                            </div>
+                            <!-- Slide 8 -->
+                            <div class="slide absolute inset-0 w-full h-full opacity-0 hidden duration-1000 transition-opacity">
+                                <img src="{{asset('img/galeri-9.jpeg')}}" alt="Modern Equipment" class="w-full h-full object-cover">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent p-5 pt-12">
+                                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest block mb-1">Logistik</span>
+                                    <h3 class="text-white text-lg font-bold font-outfit">Briefing Gudang</h3>
+                                    <p class="text-slate-300 text-xs mt-1">Mengawasi alur keluar-masuk barang dengan teliti.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gallery Controls -->
+                        <button id="prev-slide" class="absolute left-3 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-slate-950/60 hover:bg-emerald-500/80 border border-white/10 text-white flex items-center justify-center transition-all hover:scale-110 active:scale-95">
+                            <i class="fas fa-chevron-left text-xs"></i>
+                        </button>
+                        <button id="next-slide" class="absolute right-3 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-slate-950/60 hover:bg-emerald-500/80 border border-white/10 text-white flex items-center justify-center transition-all hover:scale-110 active:scale-95">
+                            <i class="fas fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+
+                    <!-- Slide Dots Indicators -->
+                    <div class="flex justify-center items-center space-x-2 mt-4">
+                        <span class="slide-dot w-8 h-2.5 rounded-full bg-emerald-400 cursor-pointer" data-index="0"></span>
+                        <span class="slide-dot w-3 h-2.5 rounded-full bg-white/40 cursor-pointer hover:bg-white/60" data-index="1"></span>
+                        <span class="slide-dot w-3 h-2.5 rounded-full bg-white/40 cursor-pointer hover:bg-white/60" data-index="2"></span>
+                        <span class="slide-dot w-3 h-2.5 rounded-full bg-white/40 cursor-pointer hover:bg-white/60" data-index="3"></span>
+                        <span class="slide-dot w-3 h-2.5 rounded-full bg-white/40 cursor-pointer hover:bg-white/60" data-index="4"></span>
+                        <span class="slide-dot w-3 h-2.5 rounded-full bg-white/40 cursor-pointer hover:bg-white/60" data-index="5"></span>
+                        <span class="slide-dot w-3 h-2.5 rounded-full bg-white/40 cursor-pointer hover:bg-white/60" data-index="6"></span>
+                        <span class="slide-dot w-3 h-2.5 rounded-full bg-white/40 cursor-pointer hover:bg-white/60" data-index="7"></span>
+                    </div>
+
+                </div>
+            </div>
+            
+            <!-- Right Side - Hero Typography & Information -->
+            <div class="lg:col-span-6 reveal-item active text-left">
+                <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest mb-6 inline-block">
+                    <i class="fas fa-leaf mr-1.5"></i> Baitulmaal Munzalan Indonesia
+                </span>
+                
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold font-outfit text-white tracking-tight leading-tight mb-6">
+                    Departemen <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500 bg-clip-text text-transparent typewriter-cursor">Asset & GA</span>
+                </h1>
+                
+                <p class="text-slate-300 text-lg leading-relaxed mb-8">
+                    Bagian tak terpisahkan dari manajemen Baitulmaal Munzalan Indonesia. Di balik layar, kami berdedikasi mengurus pengelolaan aset, distribusi logistik, penataan ruangan, hingga memastikan seluruh operasional berjalan lancar dan terstruktur.
+                </p>
+                
+                <blockquote class="border-l-4 border-emerald-400 pl-4 py-2 text-slate-400 italic text-base bg-white/5 rounded-r-lg mb-8">
+                    "Misi utama kami adalah merancang cara bekerja yang lebih baik, efisien, dan menyenangkan agar tim tidak capek kesana kemari."
+                </blockquote>
+                
+                <div class="flex flex-wrap gap-4">
+                    <a href="#apa-yang-kami-lakukan" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold py-4 px-8 rounded-xl transition-all flex items-center group shadow-lg hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:scale-[1.03]">
+                        <span>Jelajahi Tugas Kami</span>
+                        <i class="fas fa-arrow-down ml-3 group-hover:translate-y-1 transition-transform"></i>
+                    </a>
+                    <a href="#tim-inti" class="bg-slate-900/60 hover:bg-slate-800/80 text-white border border-white/10 hover:border-emerald-500/30 font-semibold py-4 px-8 rounded-xl transition-all flex items-center hover:scale-[1.03]">
+                        <span>Kenali Tim Kami</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Responsibilities Section -->
+    <section id="apa-yang-kami-lakukan" class="py-24 px-4 relative overflow-hidden bg-slate-950/20">
+        <div class="max-w-7xl mx-auto relative z-10">
+            
+            <div class="text-center mb-16 reveal-item">
+                <span class="text-emerald-400 font-semibold tracking-wider uppercase text-xs sm:text-sm block mb-2">Apa Yang Kami Lakukan?</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold font-outfit text-white mb-4">Pilar Dukungan Operasional</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 mx-auto rounded-full mb-4"></div>
+                <p class="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+                    Kami senantiasa berikhtiar menciptakan harmoni kerja yang efisien demi kemaslahatan bersama lewat pengelolaan logistik yang gesit dan responsif.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="glass-card rounded-2xl p-8 shadow-xl relative overflow-hidden group reveal-item">
+                    <div class="absolute -right-4 -bottom-4 text-emerald-500/5 text-8xl group-hover:scale-110 duration-300 transition-transform font-bold"><i class="fas fa-boxes"></i></div>
+                    <div class="w-14 h-14 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 text-2xl mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3 font-outfit">Manajemen Aset</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Mendata, merawat, dan memelihara seluruh inventaris berharga lembaga. Kami memastikan seluruh aset berada pada kesiapan penuh untuk menunjang program kemanusiaan.
+                    </p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="glass-card rounded-2xl p-8 shadow-xl relative overflow-hidden group reveal-item">
+                    <div class="absolute -right-4 -bottom-4 text-teal-500/5 text-8xl group-hover:scale-110 duration-300 transition-transform font-bold"><i class="fas fa-truck-loading"></i></div>
+                    <div class="w-14 h-14 bg-teal-500/10 border border-teal-500/20 rounded-xl flex items-center justify-center text-teal-400 text-2xl mb-6 group-hover:bg-teal-500 group-hover:text-white transition-all duration-300">
+                        <i class="fas fa-truck-loading"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3 font-outfit">General Affair (GA)</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Mulai dari mobilisasi logistik harian, penataan ruangan pertemuan yang representatif, hingga kebersihan fasilitas. Kami adalah penjamin kenyamanan kerja setiap divisi.
+                    </p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="glass-card rounded-2xl p-8 shadow-xl relative overflow-hidden group reveal-item">
+                    <div class="absolute -right-4 -bottom-4 text-emerald-500/5 text-8xl group-hover:scale-110 duration-300 transition-transform font-bold"><i class="fas fa-bolt"></i></div>
+                    <div class="w-14 h-14 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 text-2xl mb-6 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3 font-outfit">Optimalisasi & Inovasi</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Kami merancang sistem dan alur kerja yang meminimalkan kerumitan fisik. Dengan proses yang ringkas, kolaborasi tim dapat tercapai tanpa menguras energi yang tidak perlu.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="tim-inti" class="py-24 px-4 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto relative z-10">
+            
+            <div class="text-center mb-20 reveal-item">
+                <span class="text-emerald-400 font-semibold tracking-wider uppercase text-xs sm:text-sm block mb-2">Skuad Operasional</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold font-outfit text-white mb-4">Tim Penggerak Kami</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 mx-auto rounded-full mb-4"></div>
+                <p class="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+                    Sinergi individu berdedikasi tinggi yang berkomitmen memastikan kelancaran aset fisik dan kenyamanan kerja harian.
+                </p>
+            </div>
+            
+            <!-- Leader Profile - High Fidelity Portrait Card -->
+            <div class="max-w-xl mx-auto mb-20 reveal-item">
+                <div class="glass-card p-8 rounded-3xl border border-emerald-500/20 hover:border-emerald-500/40 relative overflow-hidden group shadow-2xl">
+                    <!-- Background subtle gradient glow -->
+                    <div class="absolute -right-20 -top-20 w-44 h-44 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-emerald-500/20 transition-all duration-500"></div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-8 relative z-10">
+                        <div class="relative">
+                            <div class="w-36 h-36 rounded-2xl overflow-hidden border-4 border-emerald-500/30 group-hover:border-emerald-400 shadow-xl duration-300 transition-all">
+                                <img src="{{asset('img/chou.jpg')}}" alt="Team Leader" class="w-full h-full object-cover group-hover:scale-110 duration-500 transition-all">
+                            </div>
+                            <span class="absolute -bottom-3 -right-3 bg-emerald-500 text-white w-8 h-8 rounded-full flex items-center justify-center border-2 border-slate-900 shadow-md" title="Pimpinan Bagian">
+                                <i class="fas fa-crown text-xs"></i>
+                            </span>
+                        </div>
                         
-                        <!-- Slideshow Container -->
-                        <div class="relative p-8 gallery-container">
-                            <div id="slideshow" class="relative aspect-video overflow-hidden rounded-lg shadow-2xl">
-                                <div class="progress-bar"></div>
-                                <div class="slide hidden relative w-full h-full">
-                                    <img src="{{asset('img/galeri-3.jpeg')}}" alt="Asset Management System" class="w-full h-full object-cover">
-                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent to-transparent p-4">
-                                        <h3 class="text-white text-lg font-semibold">Bounding</h3>
-                                        <p class="text-gray-300 text-sm">...</p>
-                                    </div>
-                                </div>
-                                <div class="slide hidden relative w-full h-full">
-                                    <img src="{{asset('img/galeri-2.jpeg')}}" alt="Team Working" class="w-full h-full object-cover">
-                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent to-transparent p-4">
-                                        <h3 class="text-white text-lg font-semibold">Briefing</h3>
-                                        <p class="text-gray-300 text-sm">...</p>
-                                    </div>
-                                </div>
-                                <div class="slide hidden relative w-full h-full">
-                                    <img src="{{asset('img/galeri-4.jpeg')}}" alt="Modern Equipment" class="w-full h-full object-cover">
-                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent to-transparent p-4">
-                                        <h3 class="text-white text-lg font-semibold">Paskas Day</h3>
-                                        <p class="text-gray-300 text-sm">...</p>
-                                    </div>
-                                </div>
-                                <div class="slide hidden relative w-full h-full">
-                                    <img src="{{asset('img/galeri-5.jpeg')}}" alt="Modern Equipment" class="w-full h-full object-cover">
-                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent to-transparent p-4">
-                                        <h3 class="text-white text-lg font-semibold">Di Masjid</h3>
-                                        <p class="text-gray-300 text-sm">...</p>
-                                    </div>
-                                </div>
-                                <div class="slide hidden relative w-full h-full">
-                                    <img src="{{asset('img/galeri-6.jpeg')}}" alt="Modern Equipment" class="w-full h-full object-cover">
-                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent to-transparent p-4">
-                                        <h3 class="text-white text-lg font-semibold">After Briefing</h3>
-                                        <p class="text-gray-300 text-sm">...</p>
-                                    </div>
-                                </div>
-                                <div class="slide hidden relative w-full h-full">
-                                    <img src="{{asset('img/galeri-7.jpeg')}}" alt="Modern Equipment" class="w-full h-full object-cover">
-                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent to-transparent p-4">
-                                        <h3 class="text-white text-lg font-semibold">Ruang Finance</h3>
-                                        <p class="text-gray-300 text-sm">...</p>
-                                    </div>
-                                </div>
-                                <div class="slide hidden relative w-full h-full">
-                                    <img src="{{asset('img/galeri-8.jpeg')}}" alt="Modern Equipment" class="w-full h-full object-cover">
-                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent to-transparent p-4">
-                                        <h3 class="text-white text-lg font-semibold">Ruang Finacne 2</h3>
-                                        <p class="text-gray-300 text-sm">...</p>
-                                    </div>
-                                </div>
-                                <div class="slide hidden relative w-full h-full">
-                                    <img src="{{asset('img/galeri-9.jpeg')}}" alt="Modern Equipment" class="w-full h-full object-cover">
-                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent to-transparent p-4">
-                                        <h3 class="text-white text-lg font-semibold">Briefing Gudang</h3>
-                                        <p class="text-gray-300 text-sm">...</p>
-                                    </div>
-                                </div>
-                                
-                                <!-- Enhanced Navigation Arrows -->
-                                <button id="prev-slide" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-110">
-                                    <i class="fas fa-chevron-left"></i>
-                                </button>
-                                <button id="next-slide" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-110">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                            
-                            <!-- Enhanced Slideshow Indicators -->
-                            <div class="flex justify-center mt-4 space-x-3">
-                                <span class="slide-dot active w-4 h-4 rounded-full bg-blue-500 cursor-pointer transition-all hover:bg-blue-400" data-index="0"></span>
-                                <span class="slide-dot w-4 h-4 rounded-full bg-white bg-opacity-50 cursor-pointer transition-all hover:bg-opacity-75" data-index="1"></span>
-                                <span class="slide-dot w-4 h-4 rounded-full bg-white bg-opacity-50 cursor-pointer transition-all hover:bg-opacity-75" data-index="2"></span>
+                        <div class="text-center sm:text-left flex-1">
+                            <span class="text-emerald-400 font-semibold uppercase text-xs tracking-widest block mb-1">Kepala Bagian Aset & GA</span>
+                            <h3 class="text-2xl font-bold font-outfit text-white mb-2 tracking-tight group-hover:text-emerald-300 transition-colors">Daniswat</h3>
+                            <p class="text-slate-400 text-sm italic mb-4">"Memimpin dengan visi, melayani dengan dedikasi penuh demi kesuksesan bersama."</p>
+                            <div class="flex justify-center sm:justify-start space-x-3">
+                                <span class="bg-white/5 border border-white/10 px-3 py-1 rounded-full text-xs text-slate-300"><i class="fas fa-award text-emerald-400 mr-1.5"></i> Nakhoda</span>
+                                <span class="bg-white/5 border border-white/10 px-3 py-1 rounded-full text-xs text-slate-300"><i class="fas fa-shield-alt text-teal-400 mr-1.5"></i> Strategist</span>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Skuad / Members Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8">
+                <!-- Member 1 -->
+                <div class="glass-card rounded-2xl overflow-hidden shadow-lg group flex flex-col reveal-item">
+                    <div class="h-48 sm:h-56 overflow-hidden relative border-b border-white/5">
+                        <img src="{{asset('img/yz.jpg')}}" alt="Ryan Putra Pratama" class="w-full h-full object-cover group-hover:scale-110 duration-500 transition-all">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent opacity-60"></div>
+                        <span class="absolute top-3 right-3 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 text-emerald-400 w-8 h-8 rounded-full flex items-center justify-center text-xs" title="Juragan Snack">
+                            <i class="fas fa-cookie-bite"></i>
+                        </span>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold font-outfit text-base text-white group-hover:text-emerald-300 transition-colors line-clamp-1">Ryan Putra Pratama</h4>
+                            <p class="text-emerald-400 text-xs font-semibold tracking-wider uppercase mt-1">Kepala Unit GA</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between">
+                            <span class="text-[11px] text-slate-400 italic">Juragan Snack 🍿</span>
+                            <span class="text-xs text-emerald-400/50"><i class="fas fa-user-shield"></i></span>
+                        </div>
+                    </div>
+                </div>
                 
-                <!-- Right Side - Enhanced Text Content -->
-                <div class="flex items-center justify-center scroll-reveal">
-                    <div class="bg-gradient-to-br from-black to-gray-900 bg-opacity-80 p-10 rounded-2xl backdrop-blur-sm w-full shadow-2xl">
-                        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 text-left leading-tight">
-                            <span class="text-blue-400 typewriter">Asset</span> dan <span class="text-blue-400">GA</span>
-                        </h1>
-                        {{-- <p class="text-xl md:text-2xl text-white mb-8 text-left opacity-90">Misi kami adalah merancang cara bekerja yang lebih baik</p> --}}
-                        <p class="text-white mb-10 text-left text-lg opacity-80 leading-relaxed">Salah satu bagian dari tim management Baitulmaal Munzalan Indonesia yang tugasnya yah ngurusin aset, ngangkut barang, beres-beres, nyiapin ruangan, dll. Misi Kami adalah merancang cara bekerja yang lebih baik agar tidak capek kesana kemari</p>
-                        <div class="flex justify-start">
-                            <a href="#tim-inti" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 px-8 rounded-lg transition-all flex items-center group shadow-lg hover:shadow-xl hover:scale-105">
-                                <span class="mr-3">Jelajahi Tim Kami</span>
-                                <i class="fas fa-chevron-down group-hover:animate-bounce"></i>
-                            </a>
+                <!-- Member 2 -->
+                <div class="glass-card rounded-2xl overflow-hidden shadow-lg group flex flex-col reveal-item">
+                    <div class="h-48 sm:h-56 overflow-hidden relative border-b border-white/5">
+                        <img src="{{asset('img/moskov.jpg')}}" alt="Randi" class="w-full h-full object-cover group-hover:scale-110 duration-500 transition-all">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent opacity-60"></div>
+                        <span class="absolute top-3 right-3 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 text-emerald-400 w-8 h-8 rounded-full flex items-center justify-center text-xs" title="Juragan Mobil">
+                            <i class="fas fa-car"></i>
+                        </span>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold font-outfit text-base text-white group-hover:text-emerald-300 transition-colors line-clamp-1">Randi</h4>
+                            <p class="text-emerald-400 text-xs font-semibold tracking-wider uppercase mt-1">Staf Asset</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between">
+                            <span class="text-[11px] text-slate-400 italic">Juragan Mobil 🚗</span>
+                            <span class="text-xs text-emerald-400/50"><i class="fas fa-key"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Member 3 -->
+                <div class="glass-card rounded-2xl overflow-hidden shadow-lg group flex flex-col reveal-item">
+                    <div class="h-48 sm:h-56 overflow-hidden relative border-b border-white/5">
+                        <img src="{{asset('img/julian.jpg')}}" alt="Yogi Ramadhandi" class="w-full h-full object-cover group-hover:scale-110 duration-500 transition-all">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent opacity-60"></div>
+                        <span class="absolute top-3 right-3 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 text-emerald-400 w-8 h-8 rounded-full flex items-center justify-center text-xs" title="Si Penadah">
+                            <i class="fas fa-box-open"></i>
+                        </span>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold font-outfit text-base text-white group-hover:text-emerald-300 transition-colors line-clamp-1">Yogi Ramadhandi</h4>
+                            <p class="text-emerald-400 text-xs font-semibold tracking-wider uppercase mt-1">Staf Asset</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between">
+                            <span class="text-[11px] text-slate-400 italic">Si Penadah 📦</span>
+                            <span class="text-xs text-emerald-400/50"><i class="fas fa-hand-holding-hand"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Member 4 -->
+                <div class="glass-card rounded-2xl overflow-hidden shadow-lg group flex flex-col reveal-item">
+                    <div class="h-48 sm:h-56 overflow-hidden relative border-b border-white/5">
+                        <img src="{{asset('img/gord.jpg')}}" alt="Ardi" class="w-full h-full object-cover group-hover:scale-110 duration-500 transition-all">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent opacity-60"></div>
+                        <span class="absolute top-3 right-3 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 text-emerald-400 w-8 h-8 rounded-full flex items-center justify-center text-xs" title="Si Pengacau">
+                            <i class="fas fa-bolt"></i>
+                        </span>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold font-outfit text-base text-white group-hover:text-emerald-300 transition-colors line-clamp-1">Ardi</h4>
+                            <p class="text-emerald-400 text-xs font-semibold tracking-wider uppercase mt-1">Staf GA</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between">
+                            <span class="text-[11px] text-slate-400 italic">Si Pengacau ⚡</span>
+                            <span class="text-xs text-emerald-400/50"><i class="fas fa-wind"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Member 5 -->
+                <div class="glass-card rounded-2xl overflow-hidden shadow-lg group flex flex-col reveal-item">
+                    <div class="h-48 sm:h-56 overflow-hidden relative border-b border-white/5">
+                        <img src="{{asset('img/idk.jpg')}}" alt="Habi Islami" class="w-full h-full object-cover group-hover:scale-110 duration-500 transition-all">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent opacity-60"></div>
+                        <span class="absolute top-3 right-3 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 text-emerald-400 w-8 h-8 rounded-full flex items-center justify-center text-xs" title="IT Support - Orang Ganteng">
+                            <i class="fas fa-code"></i>
+                        </span>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold font-outfit text-base text-white group-hover:text-emerald-300 transition-colors line-clamp-1">Habi Islami</h4>
+                            <p class="text-emerald-400 text-xs font-semibold tracking-wider uppercase mt-1">IT Support</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between">
+                            <span class="text-[11px] text-slate-400 italic">Orang Ganteng 😎</span>
+                            <span class="text-xs text-emerald-400/50"><i class="fas fa-laptop-code"></i></span>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </section>
-    
-    <!-- Tim Inti Section - Enhanced -->
-    <section id="tim-inti" class="parallax-section bg-gradient-to-b from-gray-900 to-black">
-        <div class="parallax-bg opacity-10"></div>
-        <div class="content-container">
-            <div class="max-w-7xl mx-auto text-white">
-                <br>
-                <h2 class="text-5xl font-bold mb-12 section-title text-center scroll-reveal">Tim Inti</h2>
-                
-                <!-- Leader - Enhanced -->
-                <div class="mb-16 text-center scroll-reveal">
-                    <div class="relative mx-auto w-40 h-40 group">
-                        <div class="w-full h-full overflow-hidden rounded-full border-4 border-blue-500 shadow-2xl transition-all group-hover:border-blue-400 group-hover:shadow-blue-500/20">
-                            <img src="{{asset('img/chou.jpg')}}" alt="Team Leader" class="w-full h-full object-cover transition-transform group-hover:scale-110">
-                        </div>
-                        <div class="absolute -inset-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2 mt-6">Daniswat</h3>
-                    <p class="text-blue-400 mb-3 text-lg">Kepala Bagian Aset & GA</p>
-                    <p class="text-gray-300 text-base italic">"Memimpin dengan visi dan dedikasi"</p>
-                </div>
-                
-                <!-- Team Members - Enhanced Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
-                    <!-- Member 1 -->
-                    <div class="team-card bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl overflow-hidden text-center shadow-lg scroll-reveal">
-                        <div class="h-40 overflow-hidden relative">
-                            <img src="{{asset('img/yz.jpg')}}" alt="Team Member 1" class="w-full h-full object-cover transition-transform hover:scale-110">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="font-bold text-base mb-1">Ryan Putra Pratama</h4>
-                            <p class="text-blue-400 text-sm mb-1">Kepala Unit GA</p>
-                            <p class="text-gray-400 text-xs">Juragan Snack</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Member 2 -->
-                    <div class="team-card bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl overflow-hidden text-center shadow-lg scroll-reveal">
-                        <div class="h-40 overflow-hidden relative">
-                            <img src="{{asset('img/moskov.jpg')}}" alt="Team Member 2" class="w-full h-full object-cover transition-transform hover:scale-110">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="font-bold text-base mb-1">Randi</h4>
-                            <p class="text-blue-400 text-sm mb-1">Staf Asset</p>
-                            <p class="text-gray-400 text-xs">Juragan Mobil</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Member 3 -->
-                    <div class="team-card bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl overflow-hidden text-center shadow-lg scroll-reveal">
-                        <div class="h-40 overflow-hidden relative">
-                            <img src="{{asset('img/julian.jpg')}}" alt="Team Member 3" class="w-full h-full object-cover transition-transform hover:scale-110">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="font-bold text-base mb-1">Yogi Ramadhandi</h4>
-                            <p class="text-blue-400 text-sm mb-1">Staf Asset</p>
-                            <p class="text-gray-400 text-xs">Si Penadah</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Member 4 -->
-                    <div class="team-card bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl overflow-hidden text-center shadow-lg scroll-reveal">
-                        <div class="h-40 overflow-hidden relative">
-                            <img src="{{asset('img/gord.jpg')}}" alt="Team Member 4" class="w-full h-full object-cover transition-transform hover:scale-110">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="font-bold text-base mb-1">Ardi</h4>
-                            <p class="text-blue-400 text-sm mb-1">Staf GA</p>
-                            <p class="text-gray-400 text-xs">Si Pengacau</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Member 5 -->
-                    <div class="team-card bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl overflow-hidden text-center shadow-lg scroll-reveal">
-                        <div class="h-40 overflow-hidden relative">
-                            <img src="{{asset('img/idk.jpg')}}" alt="Team Member 5" class="w-full h-full object-cover transition-transform hover:scale-110">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="font-bold text-base mb-1">Habi Islami</h4>
-                            <p class="text-blue-400 text-sm mb-1">IT Support</p>
-                            <p class="text-gray-400 text-xs">Orang Ganteng</p>
-                        </div>
-                    </div>
+
+    <!-- Custom Footer -->
+    <footer class="bg-slate-950/80 backdrop-blur-md border-t border-white/10 text-white py-12">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center md:text-left">
+            <div>
+                <a href="#" class="flex items-center justify-center md:justify-start space-x-3 mb-4">
+                    <img src="{{ asset('img/logo2024.png') }}" alt="BMI Logo" class="h-10 w-auto">
+                    <span class="text-white font-outfit font-bold tracking-wide">BMI PUSAT - ASSET & GA</span>
+                </a>
+                <p class="text-slate-400 text-sm max-w-xs leading-relaxed mx-auto md:mx-0">
+                    Berdedikasi untuk kenyamanan dan efisiensi bersama. Mengatur dengan hati, menjaga kelancaran aksi operasional filantropi.
+                </p>
+            </div>
+            <div class="flex flex-col items-center">
+                <p class="text-slate-300 font-semibold mb-3 font-outfit text-sm uppercase tracking-widest">Tautan Navigasi</p>
+                <div class="flex space-x-4 text-sm">
+                    <a href="#headline" class="text-slate-400 hover:text-emerald-400 transition-colors">Beranda</a>
+                    <span>&bull;</span>
+                    <a href="#apa-yang-kami-lakukan" class="text-slate-400 hover:text-emerald-400 transition-colors">Layanan</a>
+                    <span>&bull;</span>
+                    <a href="#tim-inti" class="text-slate-400 hover:text-emerald-400 transition-colors">Tim</a>
                 </div>
             </div>
-        </div>
-    </section>
-    
-    <!-- Enhanced Footer -->
-    <footer class="bg-black text-white text-center py-8 border-t border-gray-800">
-        <div class="max-w-4xl mx-auto px-4">
-            <p class="text-lg font-semibold mb-2">BMIPusat-Aset Online</p>
-            <p class="text-gray-400 mb-4">&copy; 2025 All rights reserved.</p>
-            <div class="flex justify-center space-x-6">
-                <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
-                    <i class="fab fa-instagram text-xl"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
-                    <i class="fab fa-linkedin text-xl"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
-                    <i class="fab fa-twitter text-xl"></i>
-                </a>
+            <div class="flex flex-col items-center md:items-end">
+                <p class="text-slate-300 font-semibold mb-3 font-outfit text-sm uppercase tracking-widest">Saluran Sosial</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all text-slate-300">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all text-slate-300">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all text-slate-300">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+                <p class="text-slate-500 text-xs mt-4">&copy; 2026 All rights reserved. BMIPusat-Aset.</p>
             </div>
         </div>
     </footer>
-    
+
+    <!-- Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Hide loading screen after page loads
-            setTimeout(() => {
-                document.getElementById('loading-screen').style.display = 'none';
-            }, 1500);
+            // Smooth Loading Screen Fade-out
+            const loader = document.getElementById('loading-screen');
+            if (loader) {
+                setTimeout(() => {
+                    loader.classList.add('opacity-0', 'pointer-events-none');
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 1000);
+                }, 1200);
+            }
             
-            // Background images array
-            const backgroundImages = [
-                'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920',
-                'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1920',
-                'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1920'
-            ];
+            // Background Video & Fallback Image Sources
+            const atmospheres = {
+                stream: 'https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4',
+                mist: 'https://assets.mixkit.co/videos/preview/mixkit-river-surrounded-by-forest-under-misty-sky-4548-large.mp4',
+                waterfall: 'https://assets.mixkit.co/videos/preview/mixkit-waterfall-in-forest-2213-large.mp4'
+            };
+
+            const fallbackImages = {
+                stream: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80',
+                mist: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1920&q=80',
+                waterfall: 'https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=1920&q=80'
+            };
             
-            // Initialize backgrounds
-            const headlineBackground = document.getElementById('headline-background');
-            const galleryBlurBg = document.getElementById('gallery-blur-bg');
-            
-            // Set initial background
-            headlineBackground.style.backgroundImage = `url('${backgroundImages[0]}')`;
-            galleryBlurBg.style.backgroundImage = `url('${backgroundImages[0]}')`;
-            
-            // Enhanced parallax effect
-            let ticking = false;
-            
-            function updateParallax() {
-                const parallaxBgs = document.querySelectorAll('.parallax-bg');
-                const scrollPosition = window.pageYOffset;
+            // Background switcher function
+            window.changeAtmosphere = function(type, button) {
+                const video = document.getElementById('bg-video');
+                const videoContainer = document.getElementById('video-container');
+                const overlay = document.getElementById('video-fade-overlay');
+                const url = atmospheres[type];
                 
-                parallaxBgs.forEach((bg, index) => {
-                    const speed = index === 0 ? 0.5 : 0.3;
-                    bg.style.transform = `translateY(${scrollPosition * speed}px)`;
-                });
+                if (!video || !url || !overlay) return;
                 
-                ticking = false;
-            }
-            
-            function requestParallaxUpdate() {
-                if (!ticking) {
-                    requestAnimationFrame(updateParallax);
-                    ticking = true;
-                }
-            }
-            
-            window.addEventListener('scroll', requestParallaxUpdate);
-            
-            // Enhanced navigation dots functionality
-            const sections = ['headline', 'tim-inti'];
-            const navDots = document.querySelectorAll('.nav-dot');
-            
-            function updateActiveDot() {
-                sections.forEach((sectionId, index) => {
-                    const section = document.getElementById(sectionId);
-                    if (section) {
-                        const rect = section.getBoundingClientRect();
-                        
-                        if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-                            navDots.forEach(dot => dot.classList.remove('active'));
-                            if (navDots[index]) {
-                                navDots[index].classList.add('active');
-                            }
-                        }
-                    }
-                });
-            }
-            
-            window.addEventListener('scroll', updateActiveDot);
-            
-            // Smooth scroll for navigation dots
-            navDots.forEach(dot => {
-                dot.addEventListener('click', function() {
-                    const sectionId = this.getAttribute('data-section');
-                    const section = document.getElementById(sectionId);
+                // Update active styles on buttons
+                document.querySelectorAll('.atmosphere-btn').forEach(btn => {
+                    btn.classList.remove('bg-emerald-500/20', 'border-emerald-500/30', 'text-white');
+                    btn.classList.add('bg-slate-900/60', 'border-white/5', 'text-slate-300');
                     
-                    if (section) {
-                        window.scrollTo({
-                            top: section.offsetTop,
-                            behavior: 'smooth'
-                        });
+                    // Reset custom indicator
+                    const indicator = btn.querySelector('span:last-child');
+                    if (indicator) {
+                        indicator.className = 'w-2 h-2 rounded-full bg-transparent';
                     }
                 });
-            });
+                
+                button.classList.add('bg-emerald-500/20', 'border-emerald-500/30', 'text-white');
+                button.classList.remove('bg-slate-900/60', 'border-white/5', 'text-slate-300');
+                
+                const indicator = button.querySelector('span:last-child');
+                if (indicator) {
+                    indicator.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-ping';
+                }
+                
+                // Activate theatrical transition
+                overlay.classList.remove('opacity-0');
+                overlay.classList.add('opacity-100');
+                
+                setTimeout(() => {
+                    // Update fallback image first (so if video fails to play/load, correct image is shown)
+                    if (videoContainer) {
+                        videoContainer.style.backgroundImage = `url('${fallbackImages[type]}')`;
+                    }
+
+                    video.src = url;
+                    video.load();
+                    video.play().catch(e => console.log('Autoplay blocked or load failed', e));
+                    
+                    // Ensure the icon changes to play state if the video successfully autoplays
+                    const playPauseIcon = document.getElementById('play-pause-icon');
+                    const playPauseText = document.getElementById('play-pause-text');
+                    if (playPauseIcon && playPauseText) {
+                        playPauseIcon.className = 'fas fa-pause';
+                        playPauseText.textContent = 'Pause';
+                    }
+
+                    setTimeout(() => {
+                        overlay.classList.remove('opacity-100');
+                        overlay.classList.add('opacity-0');
+                    }, 300);
+                }, 500);
+            }
             
-            // Enhanced slideshow functionality
+            // Video Background Play/Pause control
+            const btnPlayPause = document.getElementById('btn-play-pause');
+            const playPauseIcon = document.getElementById('play-pause-icon');
+            const playPauseText = document.getElementById('play-pause-text');
+            const video = document.getElementById('bg-video');
+            
+            if (btnPlayPause && video) {
+                btnPlayPause.addEventListener('click', () => {
+                    if (video.paused) {
+                        video.play().catch(e => console.log('Playback blocked', e));
+                        if (playPauseIcon) playPauseIcon.className = 'fas fa-pause';
+                        if (playPauseText) playPauseText.textContent = 'Pause';
+                    } else {
+                        video.pause();
+                        if (playPauseIcon) playPauseIcon.className = 'fas fa-play';
+                        if (playPauseText) playPauseText.textContent = 'Play';
+                    }
+                });
+            }
+            
+            // Interactive Slideshow/Gallery
             const slides = document.querySelectorAll('.slide');
             const slideDots = document.querySelectorAll('.slide-dot');
             const prevButton = document.getElementById('prev-slide');
             const nextButton = document.getElementById('next-slide');
+            const progress = document.getElementById('slide-progress');
             let currentSlide = 0;
             let slideInterval;
             
-            // Show initial slide
-            if (slides.length > 0) {
-                slides[0].classList.remove('hidden');
-                slides[0].classList.add('active');
-            }
-            
             function showSlide(index) {
-                // Hide all slides
+                if (slides.length === 0) return;
+                
                 slides.forEach(slide => {
-                    slide.classList.add('hidden');
-                    slide.classList.remove('active');
+                    slide.classList.add('hidden', 'opacity-0');
+                    slide.classList.remove('opacity-100');
                 });
                 
-                // Reset all dots
                 slideDots.forEach(dot => {
-                    dot.classList.remove('active', 'bg-blue-500');
-                    dot.classList.add('bg-white', 'bg-opacity-50');
+                    dot.classList.remove('bg-emerald-400', 'w-8');
+                    dot.classList.add('bg-white/40', 'w-3');
                 });
                 
-                // Show current slide
-                if (slides[index]) {
-                    slides[index].classList.remove('hidden');
-                    slides[index].classList.add('active');
-                }
+                slides[index].classList.remove('hidden');
+                // Trigger browser repaint
+                void slides[index].offsetWidth;
+                slides[index].classList.add('opacity-100');
                 
-                // Update dot
-                if (slideDots[index]) {
-                    slideDots[index].classList.add('active', 'bg-blue-500');
-                    slideDots[index].classList.remove('bg-white', 'bg-opacity-50');
-                }
+                slideDots[index].classList.remove('bg-white/40', 'w-3');
+                slideDots[index].classList.add('bg-emerald-400', 'w-8');
                 
-                // Update backgrounds
-                if (backgroundImages[index]) {
-                    headlineBackground.style.backgroundImage = `url('${backgroundImages[index]}')`;
-                    galleryBlurBg.style.backgroundImage = `url('${backgroundImages[index]}')`;
+                // Animate progress timeline
+                if (progress) {
+                    progress.style.transition = 'none';
+                    progress.style.width = '0%';
+                    setTimeout(() => {
+                        progress.style.transition = 'width 5000ms linear';
+                        progress.style.width = '100%';
+                    }, 50);
                 }
                 
                 currentSlide = index;
@@ -647,7 +787,6 @@
                 showSlide(newIndex);
             }
             
-            // Event listeners for slideshow
             if (nextButton) nextButton.addEventListener('click', nextSlide);
             if (prevButton) prevButton.addEventListener('click', prevSlide);
             
@@ -655,8 +794,8 @@
                 dot.addEventListener('click', () => showSlide(index));
             });
             
-            // Auto-advance slideshow
             function startSlideshow() {
+                showSlide(currentSlide);
                 slideInterval = setInterval(nextSlide, 5000);
             }
             
@@ -666,36 +805,46 @@
             
             startSlideshow();
             
-            // Pause slideshow on hover
-            const slideshow = document.getElementById('slideshow');
-            if (slideshow) {
-                slideshow.addEventListener('mouseenter', stopSlideshow);
-                slideshow.addEventListener('mouseleave', startSlideshow);
+            const slideshowContainer = document.getElementById('slideshow');
+            if (slideshowContainer) {
+                slideshowContainer.addEventListener('mouseenter', stopSlideshow);
+                slideshowContainer.addEventListener('mouseleave', startSlideshow);
             }
             
-            // Scroll reveal animation
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
+            // Side Dots Navigation & Scroll Reveal
+            const sideDots = document.querySelectorAll('.side-dot');
+            const sectionElements = document.querySelectorAll('section');
             
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('revealed');
+            function handleScrollReveal() {
+                // Reveal items when they enter the viewport
+                document.querySelectorAll('.reveal-item').forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top <= window.innerHeight * 0.88) {
+                        el.classList.add('active');
                     }
                 });
-            }, observerOptions);
+                
+                // Track current active section for navigation dots
+                let currentActive = 'headline';
+                sectionElements.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top <= window.innerHeight / 3 && rect.bottom >= window.innerHeight / 3) {
+                        currentActive = section.getAttribute('id');
+                    }
+                });
+                
+                sideDots.forEach(dot => {
+                    if (dot.getAttribute('data-section') === currentActive) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
             
-            document.querySelectorAll('.scroll-reveal').forEach(el => {
-                observer.observe(el);
-            });
-            
-            // Smooth reveal for team cards
-            const teamCards = document.querySelectorAll('.team-card');
-            teamCards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
-            });
+            window.addEventListener('scroll', handleScrollReveal);
+            // Trigger initially
+            setTimeout(handleScrollReveal, 1300);
         });
     </script>
 </body>
