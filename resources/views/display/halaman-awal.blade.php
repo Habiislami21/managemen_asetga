@@ -11,19 +11,18 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-image: url('img/background-1.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
             height: 100vh;
             margin: 0;
             overflow: hidden;
         }
 
         .login-container {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             position: relative;
             overflow: hidden;
             transition: all 0.5s ease;
@@ -102,8 +101,21 @@
         }
     </style>
 </head>
-<body class="flex items-center justify-center">
-    <div class="login-container w-11/12 max-w-md p-8 md:p-10">
+<body class="relative flex items-center justify-center min-h-screen overflow-hidden bg-gray-900">
+    <!-- Container Background Video & Fallback -->
+    <div class="absolute inset-0 w-full h-full overflow-hidden z-0">
+        <!-- Fallback Image (Tampil Seketika) -->
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ asset('img/background-1.jpg') }}');"></div>
+        
+        <!-- Video Element (Loaded via JS untuk performa maksimal) -->
+        <video id="bg-video" autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover hidden md:block opacity-0 transition-opacity duration-1000 z-10"></video>
+        
+        <!-- Overlay Gelap & Blur Estetik -->
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-[1px] z-20"></div>
+    </div>
+
+    <!-- Login Container -->
+    <div class="login-container w-11/12 max-w-md p-8 md:p-10 relative z-30">
         
         <div class="flex flex-col items-center justify-center relative z-10">
             <img src="img/logo2024.png" alt="BMI Logo" class="logo w-32 mb-6">
@@ -151,6 +163,29 @@
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById('current-date').textContent = now.toLocaleDateString('id-ID', options);
+
+        // Pemuatan Video Latar Belakang yang Dioptimalkan (Zero-Impact Loading)
+        document.addEventListener('DOMContentLoaded', () => {
+            // Hanya load video di desktop (layar lebar >= 768px) demi hemat kuota & daya mobile
+            if (window.innerWidth >= 768) {
+                const video = document.getElementById('bg-video');
+                if (video) {
+                    const source = document.createElement('source');
+                    source.src = "{{ asset('video/company profile.mp4') }}";
+                    source.type = "video/mp4";
+                    video.appendChild(source);
+                    
+                    // Trigger loading video secara asinkron
+                    video.load();
+                    
+                    // Efek transisi memudar halus saat video siap diputar
+                    video.addEventListener('canplaythrough', () => {
+                        video.classList.remove('opacity-0');
+                        video.classList.add('opacity-100');
+                    });
+                }
+            }
+        });
     </script>
 </body>
 </html>
