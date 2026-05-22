@@ -17,32 +17,24 @@
         }
 
         .login-container {
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             position: relative;
             overflow: hidden;
             transition: all 0.5s ease;
-        }
-        .login-container {
             min-width: 280px;
             width: 90%;
             padding: 1rem;
         }
 
         @media (min-width: 640px) {
-        .login-container {
-            padding: 2rem;
-            width: 85%;
+            .login-container {
+                padding: 2rem;
+                width: 85%;
+            }
         }
-        }
-
 
         .primary-color {
-            color: #a95199;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
         }
 
         h2.primary-color {
@@ -110,50 +102,50 @@
         <!-- Video Element (Loaded via JS untuk performa maksimal) -->
         <video id="bg-video" autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover hidden md:block opacity-0 transition-opacity duration-1000 z-10"></video>
         
-        <!-- Overlay Gelap & Blur Estetik -->
-        <div class="absolute inset-0 bg-black/40 backdrop-blur-[1px] z-20"></div>
+        <!-- Overlay Gelap & Blur Estetik (Sedikit Lebih Gelap agar Teks Pop) -->
+        <div class="absolute inset-0 bg-black/55 backdrop-blur-[2px] z-20"></div>
     </div>
 
-    <!-- Login Container -->
+    <!-- Login Container (Tanpa Kotak/Card Latar Belakang) -->
     <div class="login-container w-11/12 max-w-md p-8 md:p-10 relative z-30">
         
         <div class="flex flex-col items-center justify-center relative z-10">
-            <img src="img/logo2024.png" alt="BMI Logo" class="logo w-32 mb-6">
+            <img src="img/logo2024.png" alt="BMI Logo" class="logo w-32 mb-6 drop-shadow-[0_4px_6px_rgba(0,0,0,0.3)]">
             
             <h2 class="primary-color text-2xl font-bold mb-2 flex flex-col justify-center items-center text-center">
                 <!-- <span>Selamat Datang</span> -->
-                <span>Sistem BMI</span>
+                <span class="text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">Sistem BMI</span>
             </h2>
             
-            <p class="text-gray-600 mb-6 text-center">Asset & GA Management System</p>
+            <p class="text-gray-200 mb-6 text-center tracking-wide font-light drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">Asset & GA Management System</p>
             
             <div class="grid grid-cols-3 gap-2 sm:gap-4 w-full mb-8">
                 <div class="flex flex-col items-center text-center">
-                    <div class="feature-icon bg-purple-100 rounded-full p-3 mb-2">
-                        <i class="fas fa-chart-bar text-purple-600"></i>
+                    <div class="feature-icon bg-white/10 backdrop-blur-md border border-white/20 rounded-full p-3 mb-2 shadow-lg">
+                        <i class="fas fa-chart-bar text-purple-200 drop-shadow-[0_1px_3px_rgba(0,0,0,0.3)]"></i>
                     </div>
-                    <span class="text-xs text-gray-600">Asset Report</span>
+                    <span class="text-xs text-gray-200 font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">Asset Report</span>
                 </div>
                 <div class="flex flex-col items-center text-center">
-                    <div class="feature-icon bg-purple-100 rounded-full p-3 mb-2">
-                        <i class="fas fa-file-contract text-purple-600"></i>
+                    <div class="feature-icon bg-white/10 backdrop-blur-md border border-white/20 rounded-full p-3 mb-2 shadow-lg">
+                        <i class="fas fa-file-contract text-purple-200 drop-shadow-[0_1px_3px_rgba(0,0,0,0.3)]"></i>
                     </div>
-                    <span class="text-xs text-gray-600">GA Requirements</span>
+                    <span class="text-xs text-gray-200 font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">GA Requirements</span>
                 </div>
                 <div class="flex flex-col items-center text-center">
-                    <div class="feature-icon bg-purple-100 rounded-full p-3 mb-2">
-                        <i class="fas fa-car text-purple-600"></i>
+                    <div class="feature-icon bg-white/10 backdrop-blur-md border border-white/20 rounded-full p-3 mb-2 shadow-lg">
+                        <i class="fas fa-car text-purple-200 drop-shadow-[0_1px_3px_rgba(0,0,0,0.3)]"></i>
                     </div>
-                    <span class="text-xs text-gray-600 whitespace-nowrap">Vehicle Info</span>
+                    <span class="text-xs text-gray-200 font-medium whitespace-nowrap drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">Vehicle Info</span>
                 </div>
             </div>
             
-            <a href="/menu-awal" class="login-btn w-full py-3 px-6 rounded-lg text-white font-medium text-center transition-all flex items-center justify-center gap-2">
+            <a href="/menu-awal" class="login-btn w-full py-3 px-6 rounded-lg text-white font-medium text-center transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-purple-500/30">
                 <span>Assalamualaikum</span>
                 <i class="fas fa-arrow-right"></i>
             </a>
             
-            <div class="mt-6 text-xs text-gray-500 text-center">
+            <div class="mt-6 text-xs text-gray-300 text-center drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
                 <p id="current-date"></p>
             </div>
         </div>
