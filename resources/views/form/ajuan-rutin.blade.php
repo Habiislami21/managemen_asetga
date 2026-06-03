@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="{{ asset('img/logo2024.png') }}" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             background-image: url("{{ asset('img/background-2.png') }}");
@@ -41,7 +42,7 @@
         <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
             <h1 class="text-2xl font-bold mb-4">Form Pengajuan Rutin</h1>
             
-            <form action="{{ route('ajuan-rutin.store') }}" method="POST">
+            <form action="{{ route('ajuan-rutin.store') }}" method="POST" @submit.prevent="handleSubmit">
                 @csrf
                 
                 <div class="mb-6 grid grid-cols-2 gap-4">
@@ -222,13 +223,29 @@
             const handleSubmit = (event) => {
                 // Check if the form is valid before submission
                 if (items.value.some(item => !item.barang_ajuan || !item.banyak_barang || !item.harga)) {
-                    alert('Harap lengkapi semua data item sebelum menyimpan.');
-                    event.preventDefault();
-                    return false;
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Data Belum Lengkap',
+                        text: 'Harap lengkapi semua data item sebelum menyimpan.',
+                        confirmButtonColor: '#3b82f6'
+                    });
+                    return;
                 }
                 
-                // Everything is valid, let the form submit
-                return true;
+                Swal.fire({
+                    title: 'Konfirmasi Pengajuan',
+                    text: 'Apakah Anda yakin ingin mengirim pengajuan rutin ini?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3b82f6',
+                    cancelButtonColor: '#ef4444',
+                    confirmButtonText: 'Ya, Kirim',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        event.target.submit();
+                    }
+                });
             };
             
             onMounted(() => {
