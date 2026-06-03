@@ -228,7 +228,9 @@
                     $now = \Carbon\Carbon::now()->format('H:i');
                     if($tanggal == \Carbon\Carbon::today()->format('Y-m-d')) {
                         foreach($kendaraan->peminjamans as $p) {
-                            if($p->status == 'approved' && $now >= $p->jam_pinjam && $now <= $p->jam_kembali) {
+                            $jamPinjam = \Carbon\Carbon::parse($p->jam_pinjam)->format('H:i');
+                            $jamKembali = \Carbon\Carbon::parse($p->jam_kembali)->format('H:i');
+                            if($p->status == 'approved' && $now >= $jamPinjam && $now <= $jamKembali) {
                                 $isBookedNow = true;
                                 break;
                             }
