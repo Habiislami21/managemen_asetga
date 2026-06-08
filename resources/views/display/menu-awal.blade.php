@@ -24,6 +24,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
 
         .menu-container {
@@ -36,6 +37,102 @@
             width: 90%;
             max-width: 420px;
             margin: 0 auto;
+            z-index: 10;
+        }
+
+        /* Floating Clouds Styling */
+        .cloud-left {
+            position: absolute;
+            left: -8%;
+            top: 20%;
+            width: 380px;
+            max-width: 35vw;
+            opacity: 0.9;
+            pointer-events: none;
+            z-index: 2;
+            animation: floatLeft 18s ease-in-out infinite alternate;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.1));
+        }
+
+        .cloud-right {
+            position: absolute;
+            right: -8%;
+            bottom: 15%;
+            width: 420px;
+            max-width: 38vw;
+            opacity: 0.9;
+            pointer-events: none;
+            z-index: 2;
+            animation: floatRight 22s ease-in-out infinite alternate;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.1));
+        }
+
+        @keyframes floatLeft {
+            0% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+            33% {
+                transform: translate(25px, -15px) scale(1.03) rotate(0.8deg);
+            }
+            66% {
+                transform: translate(-10px, 20px) scale(0.97) rotate(-0.5deg);
+            }
+            100% {
+                transform: translate(15px, -5px) scale(1.02) rotate(0.3deg);
+            }
+        }
+
+        @keyframes floatRight {
+            0% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+            33% {
+                transform: translate(-30px, 20px) scale(0.96) rotate(-1deg);
+            }
+            66% {
+                transform: translate(15px, -25px) scale(1.04) rotate(0.6deg);
+            }
+            100% {
+                transform: translate(-15px, 10px) scale(0.98) rotate(-0.4deg);
+            }
+        }
+
+        /* Responsive design for clouds on mobile */
+        @media (max-width: 768px) {
+            .cloud-left {
+                width: 160px;
+                max-width: 45vw;
+                left: -12%;
+                top: 10%;
+                opacity: 0.75;
+                animation: floatLeftMobile 12s ease-in-out infinite alternate;
+            }
+            .cloud-right {
+                width: 200px;
+                max-width: 50vw;
+                right: -12%;
+                bottom: 8%;
+                opacity: 0.75;
+                animation: floatRightMobile 14s ease-in-out infinite alternate;
+            }
+        }
+
+        @keyframes floatLeftMobile {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                transform: translate(10px, -10px) scale(1.05);
+            }
+        }
+
+        @keyframes floatRightMobile {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                transform: translate(-12px, 12px) scale(0.95);
+            }
         }
 
         /* Laptop/Desktop specific width */
@@ -93,6 +190,10 @@
     </style>
 </head>
 <body>
+    <!-- Floating Clouds Background Elements -->
+    <img src="img/awan-1.png" alt="Cloud Left" class="cloud-left">
+    <img src="img/awan-2.png" alt="Cloud Right" class="cloud-right">
+
     <div class="menu-container p-4 md:p-6">
         
         <div class="flex flex-col items-center justify-center relative z-10">
