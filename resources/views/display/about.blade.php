@@ -30,7 +30,7 @@
         <!-- UI Overlay Layer -->
         <div id="ui-layer">
             <!-- Back to Home -->
-            <a href="{{ url('/') }}" id="back-btn">
+            <a href="{{ url('/menu-awal') }}" id="back-btn">
                 <i class="fas fa-arrow-left"></i> Kembali
             </a>
 
@@ -40,7 +40,7 @@
                 <div class="progress-bar-container">
                     <div id="progress-bar-fill"></div>
                 </div>
-                <span id="progress-count">0/6</span>
+                <span id="progress-count">0/5</span>
             </div>
 
             <!-- Dialog Box -->
@@ -72,7 +72,8 @@
 
     <!-- Intro Overlay Screen -->
     <div id="intro-overlay">
-        <img src="{{ asset('img/logo2024.png') }}" alt="Mascot" class="intro-mascot">
+        <img src="{{ asset('img/habiislami.jpeg') }}" alt="Habi Islami" class="intro-mascot">
+        <div style="font-size: 22px; font-weight: bold; color: #10b981; margin-bottom: 15px; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">Habi Islami</div>
         <div class="intro-box">
             <div id="intro-text" class="typewriter-cursor"></div>
             <div style="margin-top: 20px; display: flex; gap: 15px; justify-content: center;">

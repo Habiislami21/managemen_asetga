@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: "daniswat",
             name: "Daniswat",
             role: "Kepala Bagian Aset & GA",
-            avatar: "img/chou.jpg",
+            avatar: "img/dani.jpeg",
             position: { top: "45%", left: "50%" }, // Center/Boss area
             dialog: [
                 "Halo, selamat datang di kantor pusat kami.",
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: "ryan",
             name: "Ryan Putra Pratama",
             role: "Kepala Unit GA",
-            avatar: "img/yz.jpg",
+            avatar: "img/ryan.jpeg",
             position: { top: "60%", left: "20%" }, // Left area
             dialog: [
                 "Yo! Saya mengurus segala urusan General Affair.",
@@ -27,21 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         },
         {
-            id: "randi",
-            name: "Randi",
-            role: "Staf Asset",
-            avatar: "img/moskov.jpg",
-            position: { top: "50%", left: "80%" }, // Right area
-            dialog: [
-                "Salam! Saya memantau pergerakan mobil dan aset fisik lainnya.",
-                "Mobil harus selalu prima untuk menunjang kegiatan operasional."
-            ]
-        },
-        {
             id: "yogi",
             name: "Yogi Ramadhandi",
             role: "Staf Asset",
-            avatar: "img/julian.jpg",
+            avatar: "img/yogi.jpeg",
             position: { top: "70%", left: "35%" },
             dialog: [
                 "Hai. Saya bertugas di bagian logistik dan penerimaan barang.",
@@ -49,10 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         },
         {
-            id: "ardi",
-            name: "Ardi",
+            id: "dodo",
+            name: "Muhammad Ikhwanul Widodo",
             role: "Staf GA",
-            avatar: "img/gord.jpg",
+            avatar: "img/dodo.jpeg",
             position: { top: "75%", left: "65%" },
             dialog: [
                 "Halo! Kebersihan dan teknis lapangan adalah makanan sehari-hari saya.",
@@ -63,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: "habi",
             name: "Habi Islami",
             role: "IT Support",
-            avatar: "img/idk.jpg",
+            avatar: "img/habiislami.jpeg",
             position: { top: "40%", left: "10%" },
             dialog: [
                 "Bip bop. Saya IT Support di sini.",
@@ -75,6 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // State Management
     let visitedCharacters = JSON.parse(localStorage.getItem('visitedCharacters_about')) || [];
+    // Filter out any characters that no longer exist in teamData
+    const validIds = teamData.map(char => char.id);
+    visitedCharacters = visitedCharacters.filter(id => validIds.includes(id));
+    
     let currentCharacter = null;
     let currentDialogIndex = 0;
     let isTyping = false;
@@ -87,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const introText = document.getElementById('intro-text');
     const btnNextIntro = document.getElementById('btn-next-intro');
     const btnSkipIntro = document.getElementById('btn-skip-intro');
-    
+
     const dialogBox = document.getElementById('dialog-box');
     const dialogName = document.getElementById('dialog-name');
     const dialogRole = document.getElementById('dialog-role');
@@ -95,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dialogAvatar = document.getElementById('dialog-avatar');
     const btnNextDialog = document.getElementById('btn-next-dialog');
     const btnCloseDialog = document.getElementById('btn-close-dialog');
-    
+
     const progressFill = document.getElementById('progress-bar-fill');
     const progressCount = document.getElementById('progress-count');
     const achievementPopup = document.getElementById('achievement-popup');
@@ -123,15 +116,15 @@ document.addEventListener('DOMContentLoaded', () => {
             charDiv.style.top = char.position.top;
             charDiv.style.left = char.position.left;
             charDiv.title = char.name;
-            
+
             const img = document.createElement('img');
             img.src = char.avatar;
             img.alt = char.name;
-            
+
             charDiv.appendChild(img);
-            
+
             charDiv.addEventListener('click', () => openDialog(char, charDiv));
-            
+
             officeEnvironment.appendChild(charDiv);
         });
     }
@@ -142,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let i = 0;
         isTyping = true;
         clearInterval(typeInterval);
-        
+
         typeInterval = setInterval(() => {
             if (i < text.length) {
                 element.innerHTML += text.charAt(i);
@@ -165,9 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Intro Sequence
     function playIntro() {
         const introDialogs = [
-            "Selamat datang di kantor BMI Pusat.",
-            "Saya maskot virtual Anda. Klik setiap anggota tim yang ada di ruangan ini untuk mengenal mereka lebih dekat.",
-            "Semoga kunjungan Anda menyenangkan!"
+            "Halo! Selamat datang di kantor BMI Pusat. Saya Habi Islami dari IT Support, pemandu sekaligus developer halaman ini.",
+            "Di sini, Anda bisa mengenal seluruh tim Bagian Aset & GA dengan cara yang interaktif.",
+            "Silakan klik setiap anggota tim yang ada di ruangan ini untuk berkenalan dengan mereka. Selamat menjelajah!"
         ];
         let introIdx = 0;
 
@@ -204,20 +197,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Dialog System
     function openDialog(character, charElement) {
         if (introOverlay.classList.contains('hidden') === false) return; // Don't open if intro is active
-        
+
         currentCharacter = character;
         currentDialogIndex = 0;
-        
+
         // Update UI
         dialogName.textContent = character.name;
         dialogRole.textContent = character.role;
         dialogAvatar.src = character.avatar;
-        
+
         // Show Box
         dialogBox.classList.add('active');
-        
+
         showDialogLine();
-        
+
         // Mark as visited
         if (!visitedCharacters.includes(character.id)) {
             visitedCharacters.push(character.id);
@@ -229,9 +222,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showDialogLine() {
         if (!currentCharacter) return;
-        
+
         const text = currentCharacter.dialog[currentDialogIndex];
-        
+
         if (currentDialogIndex === currentCharacter.dialog.length - 1) {
             btnNextDialog.style.display = 'none';
             btnCloseDialog.style.display = 'block';
@@ -239,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnNextDialog.style.display = 'block';
             btnCloseDialog.style.display = 'none';
         }
-        
+
         typeWriter(text, dialogText);
     }
 
@@ -268,10 +261,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const total = teamData.length;
         const current = visitedCharacters.length;
         const percentage = (current / total) * 100;
-        
+
         progressCount.textContent = `${current}/${total}`;
         progressFill.style.width = `${percentage}%`;
-        
+
         if (current === total && !localStorage.getItem('achievementShown_about')) {
             showAchievement();
         }
