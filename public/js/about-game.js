@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             position: { top: "76%", left: "29.3%" }, // Chair 2
             dialog: [
                 "Yo! Saya mengurus segala urusan General Affair.",
-                "Kenyamanan ruangan dan ketersediaan snack adalah tanggung jawab saya.",
+                "Kenyamanan ruangan dan ketersediaan operasional adalah tanggung jawab saya.",
                 "Mau snack? Haha, canda."
             ]
         },
@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
             avatar: "img/yogi.jpeg",
             position: { top: "76%", left: "71.9%" }, // Chair 4
             dialog: [
-                "Hai. Saya bertugas di bagian logistik dan penerimaan barang.",
-                "Semua barang yang masuk dan keluar saya catat dengan rapi."
+                "Hai. Saya bertugas di bagian aset, lpj, dan realisasi.",
+                "Semua peminjaman dan pengembalian aset milik BMI harus melalui saya."
             ]
         },
         {
@@ -126,7 +126,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
             charDiv.appendChild(img);
 
-            charDiv.addEventListener('click', () => openDialog(char, charDiv));
+            charDiv.addEventListener('click', () => {
+                if (char.id === 'habi') {
+                    if (!visitedCharacters.includes('habi')) {
+                        const visitedCountExcludingHabi = visitedCharacters.filter(id => id !== 'habi').length;
+
+                        if (visitedCountExcludingHabi < 4) {
+                            // Trigger Prank! Teleport to a random position
+                            const randomLeft = Math.floor(Math.random() * 70) + 15; // 15% to 85%
+                            const randomTop = Math.floor(Math.random() * 35) + 40;  // 40% to 75%
+
+                            charDiv.style.left = `${randomLeft}%`;
+                            charDiv.style.top = `${randomTop}%`;
+                            charDiv.style.setProperty('--base-top', `${randomTop}%`);
+
+                            // Speech Bubble Prank Jokes
+                            const jokeTexts = [
+                                "Eitss, kenalan sama yang lain dulu! Saya bos terakhir di sini. 😉",
+                                "Sssttt! Saya cuma bisa diklik paling terakhir!",
+                                "Wusshh! Kejar saya kalau bisa! ⚡",
+                                "Belum saatnya! Sapa rekan kerja saya yang lain dulu ya.",
+                                "Bip bop! Akses ditolak. Kenalan dulu dengan yang lain hehe! 🤖",
+                                "Eits! Ga kena~ 🏃‍♂️"
+                            ];
+
+                            const existingBubble = charDiv.querySelector('.speech-bubble');
+                            if (existingBubble) existingBubble.remove();
+
+                            const bubble = document.createElement('div');
+                            bubble.className = 'speech-bubble';
+                            bubble.textContent = jokeTexts[Math.floor(Math.random() * jokeTexts.length)];
+                            charDiv.appendChild(bubble);
+
+                            setTimeout(() => {
+                                bubble.classList.add('fade-out');
+                                setTimeout(() => bubble.remove(), 500);
+                            }, 2000);
+
+                            return; // Block opening dialog
+                        } else {
+                            // Return to original position when unlocked
+                            charDiv.style.left = char.position.left;
+                            charDiv.style.top = char.position.top;
+                            charDiv.style.setProperty('--base-top', char.position.top);
+                        }
+                    } else {
+                        // Keep in original position if already visited
+                        charDiv.style.left = char.position.left;
+                        charDiv.style.top = char.position.top;
+                        charDiv.style.setProperty('--base-top', char.position.top);
+                    }
+                }
+                openDialog(char, charDiv);
+            });
 
             officeEnvironment.appendChild(charDiv);
         });

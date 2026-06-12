@@ -568,3 +568,40 @@ html {
         letter-spacing: 3px;
     }
 }
+
+/* Prank Speech Bubble for Habi */
+.speech-bubble {
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.95);
+    border: 2px solid #10b981;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+    z-index: 100;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.5);
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 1;
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #10b981 transparent transparent transparent;
+}
+
+.speech-bubble.fade-out {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+}
