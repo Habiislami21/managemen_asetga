@@ -9,7 +9,8 @@
     --vn-name-bg: #047857;
 }
 
-body, html {
+body,
+html {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -111,8 +112,13 @@ body, html {
 }
 
 @keyframes floatChar {
-    0% { top: calc(var(--base-top) - 8px); }
-    100% { top: calc(var(--base-top) + 8px); }
+    0% {
+        top: calc(var(--base-top) - 8px);
+    }
+
+    100% {
+        top: calc(var(--base-top) + 8px);
+    }
 }
 
 /* UI Overlay Layer */
@@ -132,7 +138,7 @@ body, html {
     top: 20px;
     left: 20px;
     background: rgba(0, 0, 0, 0.7);
-    border: 2px solid rgba(255,255,255,0.2);
+    border: 2px solid rgba(255, 255, 255, 0.2);
     color: white;
     padding: 10px 20px;
     border-radius: 10px;
@@ -169,13 +175,13 @@ body, html {
     gap: 12px;
     pointer-events: auto;
     backdrop-filter: blur(8px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
 .progress-bar-container {
     width: 100px;
     height: 8px;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 4px;
     overflow: hidden;
 }
@@ -205,7 +211,7 @@ body, html {
     transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     pointer-events: auto;
     backdrop-filter: blur(15px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(16, 185, 129, 0.1);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(16, 185, 129, 0.1);
 }
 
 #dialog-box.active {
@@ -240,7 +246,7 @@ body, html {
     font-weight: bold;
     border: 2px solid var(--vn-border);
     font-size: 20px;
-    box-shadow: 3px 3px 0 rgba(0,0,0,0.4);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
     letter-spacing: 1px;
 }
 
@@ -269,8 +275,15 @@ body, html {
 }
 
 @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
 }
 
 .dialog-controls {
@@ -332,8 +345,13 @@ body, html {
 }
 
 @keyframes floatIntro {
-    0% { transform: translateY(-15px); }
-    100% { transform: translateY(15px); }
+    0% {
+        transform: translateY(-15px);
+    }
+
+    100% {
+        transform: translateY(15px);
+    }
 }
 
 .intro-box {
@@ -345,7 +363,7 @@ body, html {
     width: 90%;
     text-align: center;
     color: white;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
 #intro-text {
@@ -372,7 +390,7 @@ body, html {
     box-shadow: 0 10px 30px rgba(16, 185, 129, 0.6);
     transition: top 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 300;
-    border: 2px solid rgba(255,255,255,0.4);
+    border: 2px solid rgba(255, 255, 255, 0.4);
     font-size: 16px;
 }
 
@@ -398,19 +416,26 @@ body, html {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
     padding: 8px 16px;
     border-radius: 20px;
     color: white;
     font-size: 14px;
     pointer-events: none;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     animation: pulseText 2s infinite;
 }
 
 @keyframes pulseText {
-    0%, 100% { opacity: 0.7; }
-    50% { opacity: 1; }
+
+    0%,
+    100% {
+        opacity: 0.7;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }
 
 /* Neon Sign Title (3D Bouncing Shadow) */
@@ -430,7 +455,8 @@ body, html {
     z-index: 5;
     animation: text-shadow-bounce 1.5s ease-in-out infinite;
     cursor: default;
-    pointer-events: auto; /* allow hover to pause */
+    pointer-events: auto;
+    /* allow hover to pause */
 }
 
 .office-title-neon:hover {
@@ -438,48 +464,48 @@ body, html {
 }
 
 @keyframes text-shadow-bounce {
-    0% {  
+    0% {
         transform: translateX(-50%) translateY(0);
-        text-shadow: 
-            0 0 0 #0c2ffb, 
-            0 0 0 #2cfcfd, 
-            0 0 0 #fb203b, 
+        text-shadow:
+            0 0 0 #0c2ffb,
+            0 0 0 #2cfcfd,
+            0 0 0 #fb203b,
             0 0 0 #fefc4b;
     }
 
-    20% {  
+    20% {
         transform: translateX(-50%) translateY(-0.8em);
-        text-shadow: 
-            0 0.125em 0 #0c2ffb, 
-            0 0.25em 0 #2cfcfd, 
-            0 -0.125em 0 #fb203b, 
+        text-shadow:
+            0 0.125em 0 #0c2ffb,
+            0 0.25em 0 #2cfcfd,
+            0 -0.125em 0 #fb203b,
             0 -0.25em 0 #fefc4b;
     }
 
-    40% {  
+    40% {
         transform: translateX(-50%) translateY(0.4em);
-        text-shadow: 
-            0 -0.0625em 0 #0c2ffb, 
-            0 -0.125em 0 #2cfcfd, 
-            0 0.0625em 0 #fb203b, 
+        text-shadow:
+            0 -0.0625em 0 #0c2ffb,
+            0 -0.125em 0 #2cfcfd,
+            0 0.0625em 0 #fb203b,
             0 0.125em 0 #fefc4b;
     }
-    
-   60% {
+
+    60% {
         transform: translateX(-50%) translateY(-0.2em);
-        text-shadow: 
-            0 0.03125em 0 #0c2ffb, 
-            0 0.0625em 0 #2cfcfd, 
-            0 -0.03125em 0 #fb203b, 
+        text-shadow:
+            0 0.03125em 0 #0c2ffb,
+            0 0.0625em 0 #2cfcfd,
+            0 -0.03125em 0 #fb203b,
             0 -0.0625em 0 #fefc4b;
     }
 
-    80% {  
+    80% {
         transform: translateX(-50%) translateY(0);
-        text-shadow: 
-            0 0 0 #0c2ffb, 
-            0 0 0 #2cfcfd, 
-            0 0 0 #fb203b, 
+        text-shadow:
+            0 0 0 #0c2ffb,
+            0 0 0 #2cfcfd,
+            0 0 0 #fb203b,
             0 0 0 #fefc4b;
     }
 }
@@ -489,12 +515,12 @@ body, html {
     #office-environment {
         /* aspect ratio handled by max(100vw, 154.64vh) */
     }
-    
+
     .interactive-character {
         width: 80px;
         height: 80px;
     }
-    
+
     #dialog-box {
         flex-direction: column;
         align-items: center;
@@ -503,14 +529,14 @@ body, html {
         padding: 20px;
         width: 95%;
     }
-    
+
     #dialog-avatar {
         width: 90px;
         height: 90px;
         margin-top: -60px;
         border-radius: 50%;
     }
-    
+
     #dialog-name {
         position: relative;
         top: 0;
@@ -518,24 +544,24 @@ body, html {
         display: inline-block;
         margin-bottom: 5px;
     }
-    
+
     .dialog-controls {
         align-self: center;
         width: 100%;
         justify-content: center;
     }
-    
+
     #progress-hud {
         top: auto;
         bottom: 20px;
         right: 20px;
     }
-    
+
     #click-instruction {
         top: 20px;
         bottom: auto;
     }
-    
+
     .office-title-neon {
         font-size: 1.5rem;
         top: 15%;

@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Filter out any characters that no longer exist in teamData
     const validIds = teamData.map(char => char.id);
     visitedCharacters = visitedCharacters.filter(id => validIds.includes(id));
-    
+
     let currentCharacter = null;
     let currentDialogIndex = 0;
     let isTyping = false;
@@ -109,6 +109,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Render Characters to Office
     function renderCharacters() {
+        // Clear existing characters to prevent duplicates on reset
+        document.querySelectorAll('.interactive-character').forEach(el => el.remove());
+
         teamData.forEach(char => {
             const charDiv = document.createElement('div');
             charDiv.className = `interactive-character ${visitedCharacters.includes(char.id) ? 'visited' : ''}`;
@@ -156,21 +159,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Intro Sequence
+    const introDialogs = [
+        "Halo! Selamat datang di kantor BMI Pusat. Saya Habi Islami dari IT Support, pemandu sekaligus developer halaman ini.",
+        "Di sini, Anda bisa mengenal seluruh tim Bagian Aset & GA dengan cara yang interaktif.",
+        "Silakan klik setiap anggota tim yang ada di ruangan ini untuk berkenalan dengan mereka. Selamat menjelajah!"
+    ];
+    let introIdx = 0;
+
     function playIntro() {
-        const introDialogs = [
-            "Halo! Selamat datang di kantor BMI Pusat. Saya Habi Islami dari IT Support, pemandu sekaligus developer halaman ini.",
-            "Di sini, Anda bisa mengenal seluruh tim Bagian Aset & GA dengan cara yang interaktif.",
-            "Silakan klik setiap anggota tim yang ada di ruangan ini untuk berkenalan dengan mereka. Selamat menjelajah!"
-        ];
-        let introIdx = 0;
-
-        const showIntroText = () => {
-            typeWriter(introDialogs[introIdx], introText);
-        };
-
+        introIdx = 0;
+        btnNextIntro.textContent = 'Next';
         showIntroText();
+    }
 
-        btnNextIntro.addEventListener('click', () => {
+    function showIntroText() {
+        typeWriter(introDialogs[introIdx], introText);
+    }
+
+    btnNextIntro.addEventListener('click', () => {
+        if (!introOverlay.classList.contains('hidden')) {
             if (isTyping) {
                 stopTypeWriter(introDialogs[introIdx], introText);
             } else {
@@ -184,10 +191,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     finishIntro();
                 }
             }
-        });
+        }
+    });
 
-        btnSkipIntro.addEventListener('click', finishIntro);
-    }
+    btnSkipIntro.addEventListener('click', () => {
+        if (!introOverlay.classList.contains('hidden')) {
+            finishIntro();
+        }
+    });
 
     function finishIntro() {
         introOverlay.classList.add('hidden');
@@ -265,6 +276,15 @@ document.addEventListener('DOMContentLoaded', () => {
         progressCount.textContent = `${current}/${total}`;
         progressFill.style.width = `${percentage}%`;
 
+        const btnResetProgress = document.getElementById('btn-reset-progress');
+        if (btnResetProgress) {
+            if (current === total) {
+                btnResetProgress.style.display = 'inline-flex';
+            } else {
+                btnResetProgress.style.display = 'none';
+            }
+        }
+
         if (current === total && !localStorage.getItem('achievementShown_about')) {
             showAchievement();
         }
@@ -278,5 +298,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 achievementPopup.classList.remove('show');
             }, 5000);
         }, 1000);
+    }
+
+    // Reset Progress Functionality
+    function resetProgress() {
+        localStorage.removeItem('visitedCharacters_about');
+        localStorage.removeItem('introFinished_about');
+        localStorage.removeItem('achievementShown_about');
+
+        visitedCharacters = [];
+        introFinished = false;
+
+        dialogBox.classList.remove('active');
+        currentCharacter = null;
+
+        renderCharacters();
+        updateProgressUI();
+
+        introOverlay.classList.remove('hidden');
+        playIntro();
+    }
+
+    const btnResetProgress = document.getElementById('btn-reset-progress');
+    if (btnResetProgress) {
+        btnResetProgress.addEventListener('click', resetProgress);
     }
 });

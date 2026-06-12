@@ -44,6 +44,9 @@
                     <div id="progress-bar-fill"></div>
                 </div>
                 <span id="progress-count">0/5</span>
+                <button id="btn-reset-progress" class="btn-game" style="display: none; padding: 4px 12px; font-size: 11px; margin-left: 12px; align-items: center; gap: 5px;">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
             </div>
 
             <!-- Dialog Box -->
