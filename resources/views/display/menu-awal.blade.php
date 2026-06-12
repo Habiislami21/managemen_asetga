@@ -522,6 +522,13 @@
 
     <!-- AI Chatbot Floating Widget -->
     <div id="ai-chat-widget">
+        <!-- Chat Bubble Prompt -->
+        <div id="ai-chat-prompt" class="fixed bottom-24 right-5 bg-white text-purple-700 px-4 py-2 rounded-2xl shadow-xl text-sm font-medium z-40 cursor-pointer hover:bg-gray-50 transition-all duration-300 animate-bounce">
+            Kalo bingung tanya disini aja! 👋
+            <!-- Tail of the bubble -->
+            <div class="absolute -bottom-2 right-6 w-4 h-4 bg-white transform rotate-45 shadow-sm"></div>
+        </div>
+
         <!-- Floating Toggle Button (Habi Icon) -->
         <button id="ai-chat-toggle" class="fixed bottom-5 right-5 w-16 h-16 rounded-full border-4 border-purple-600 shadow-2xl overflow-hidden focus:outline-none hover:scale-110 transition-all z-50">
             <img src="{{ asset('img/habiislami.jpeg') }}" alt="Habi AI" class="w-full h-full object-cover">
@@ -536,7 +543,7 @@
                         <img src="{{ asset('img/habiislami.jpeg') }}" alt="Habi AI">
                     </div>
                     <div>
-                        <div class="ai-chat-title">Habi AI Support</div>
+                        <div class="ai-chat-title">Habi Support</div>
                         <div class="ai-chat-status">Online</div>
                     </div>
                 </div>
@@ -546,7 +553,7 @@
             <div id="ai-chat-messages">
                 <div class="chat-message assistant">
                     <div class="message-bubble">
-                        Halo! Saya <strong>Habi AI Support</strong>. Ada yang bisa saya bantu terkait aplikasi <strong>Manajemen Aset & GA</strong> (Aduan Aset, Ajuan Rutin, Peminjaman Kendaraan, dll.) atau anggota tim kami?
+                        Halo! Saya <strong>Habi</strong>. Ada yang bisa saya bantu terkait aplikasi <strong>Manajemen Aset & GA</strong> (Aduan Aset, Ajuan Rutin, Peminjaman Kendaraan, dll.) atau anggota tim kami?
                     </div>
                 </div>
             </div>
@@ -575,10 +582,31 @@
         const aiChatInput = document.getElementById('ai-chat-input');
         const aiChatSend = document.getElementById('ai-chat-send');
         const aiChatMessages = document.getElementById('ai-chat-messages');
+        const aiChatPrompt = document.getElementById('ai-chat-prompt');
+
+        if (aiChatPrompt) {
+            // Buka chat window saat prompt diklik
+            aiChatPrompt.addEventListener('click', () => {
+                aiChatPrompt.style.display = 'none';
+                if (aiChatWindow.classList.contains('chat-window-hidden')) {
+                    aiChatToggle.click();
+                }
+            });
+            
+            // Hilangkan prompt otomatis setelah 15 detik agar tidak mengganggu
+            setTimeout(() => {
+                if(aiChatPrompt) {
+                    aiChatPrompt.style.opacity = '0';
+                    setTimeout(() => { aiChatPrompt.style.display = 'none'; }, 300);
+                }
+            }, 15000);
+        }
 
         if (aiChatToggle && aiChatWindow) {
             // Toggle Chat Window
             aiChatToggle.addEventListener('click', () => {
+                if (aiChatPrompt) aiChatPrompt.style.display = 'none';
+                
                 aiChatWindow.classList.toggle('chat-window-hidden');
                 if (!aiChatWindow.classList.contains('chat-window-hidden')) {
                     aiChatInput.focus();
