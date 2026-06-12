@@ -158,7 +158,6 @@ Route::get('/admin/cek-bulanan/get-stok-detail/{id}', [AjuanStokDivisiController
     ->name('cek-bulanan.get-stok-detail');
 Route::post('/admin/cek-bulanan/batch-mark-match', [AjuanStokDivisiController::class, 'batchMarkMatch']);
 
-// Peminjaman Kendaraan Routes (Public)
 use App\Http\Controllers\PeminjamanController;
 
 Route::get('/peminjaman/jadwal', [PeminjamanController::class, 'jadwal'])->name('peminjaman.jadwal');
@@ -169,7 +168,6 @@ Route::get('/peminjaman/riwayat', [PeminjamanController::class, 'riwayat'])->nam
 Route::post('/peminjaman/statistik/auth', [PeminjamanController::class, 'statistikAuth'])->name('peminjaman.statistik.auth');
 Route::get('/peminjaman/statistik', [PeminjamanController::class, 'statistik'])->name('peminjaman.statistik');
 
-// Peminjaman Kendaraan Routes (Admin Approval)
 Route::get('/peminjaman/approval/{token}', [PeminjamanController::class, 'approvalView'])->name('peminjaman.approval');
 Route::post('/peminjaman/approval/{token}/approve', [PeminjamanController::class, 'approve'])->name('peminjaman.approve');
 Route::post('/peminjaman/approval/{token}/reject', [PeminjamanController::class, 'reject'])->name('peminjaman.reject');

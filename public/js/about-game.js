@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: "Daniswat",
             role: "Kepala Bagian Aset & GA",
             avatar: "img/dani.jpeg",
-            position: { top: "45%", left: "50%" }, // Center/Boss area
+            position: { top: "76%", left: "51.1%" }, // Chair 3 (Center/Boss area)
             dialog: [
                 "Halo, selamat datang di kantor pusat kami.",
                 "Saya memastikan seluruh operasional berjalan lancar dan terstruktur.",
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: "Ryan Putra Pratama",
             role: "Kepala Unit GA",
             avatar: "img/ryan.jpeg",
-            position: { top: "60%", left: "20%" }, // Left area
+            position: { top: "76%", left: "29.3%" }, // Chair 2
             dialog: [
                 "Yo! Saya mengurus segala urusan General Affair.",
                 "Kenyamanan ruangan dan ketersediaan snack adalah tanggung jawab saya.",
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: "Yogi Ramadhandi",
             role: "Staf Asset",
             avatar: "img/yogi.jpeg",
-            position: { top: "70%", left: "35%" },
+            position: { top: "76%", left: "71.9%" }, // Chair 4
             dialog: [
                 "Hai. Saya bertugas di bagian logistik dan penerimaan barang.",
                 "Semua barang yang masuk dan keluar saya catat dengan rapi."
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: "Muhammad Ikhwanul Widodo",
             role: "Staf GA",
             avatar: "img/dodo.jpeg",
-            position: { top: "75%", left: "65%" },
+            position: { top: "76%", left: "90.6%" }, // Chair 5
             dialog: [
                 "Halo! Kebersihan dan teknis lapangan adalah makanan sehari-hari saya.",
                 "Kalau ada fasilitas yang rusak, lapor ke saya ya."
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: "Habi Islami",
             role: "IT Support",
             avatar: "img/habiislami.jpeg",
-            position: { top: "40%", left: "10%" },
+            position: { top: "76%", left: "9.6%" }, // Chair 1
             dialog: [
                 "Bip bop. Saya IT Support di sini.",
                 "Menulis kode, memperbaiki bug, dan memastikan sistem berjalan stabil.",

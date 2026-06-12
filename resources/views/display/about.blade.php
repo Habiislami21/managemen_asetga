@@ -18,7 +18,10 @@
     <div id="game-container">
         
         <!-- Environment Layer -->
-        <div id="office-environment" style="background-image: url('{{ asset('img/office-1.jfif') }}');">
+        <div id="office-environment" style="background-image: url('{{ asset('img/meeting-2.jpg') }}');">
+            <!-- Neon Sign Title -->
+            <div class="office-title-neon">Asset & General Affair</div>
+            
             <!-- Characters will be injected here by JS -->
             
             <!-- Floating click instruction -->
