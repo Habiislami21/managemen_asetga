@@ -160,6 +160,10 @@
                             <td>{{ $peminjaman->nama_peminjam }}</td>
                         </tr>
                         <tr>
+                            <th>Nama Driver</th>
+                            <td>{{ $peminjaman->nama_driver }}</td>
+                        </tr>
+                        <tr>
                             <th>Nomor HP</th>
                             <td>{{ $peminjaman->nomor_hp }}</td>
                         </tr>

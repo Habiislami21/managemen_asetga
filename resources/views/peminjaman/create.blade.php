@@ -385,6 +385,16 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="nama_driver">Nama Driver</label>
+                    <div class="input-with-icon">
+                        <input type="text" class="form-control @error('nama_driver') is-invalid @enderror" 
+                               name="nama_driver" id="nama_driver" placeholder="Masukkan nama driver"
+                               value="{{ old('nama_driver') }}" required>
+                        <i class="fas fa-user-tie input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="nomor_hp">Nomor HP (WhatsApp)</label>
                     <div class="input-with-icon">
                         <input type="tel" class="form-control @error('nomor_hp') is-invalid @enderror" 
@@ -455,7 +465,7 @@
                 <div class="form-check mb-4">
                     <input class="form-check-input @error('tanggung_jawab') is-invalid @enderror" type="checkbox" id="tanggung_jawab" name="tanggung_jawab" required>
                     <label class="form-check-label text-danger fw-bold" for="tanggung_jawab">
-                        Saya bertanggung jawab penuh atas kendaraan selama masa peminjaman.
+                        Saya bertanggung jawab penuh atas kendaraan selama masa peminjaman. Segala kerusakan, kebersihan, dan bahan bakar bansin kendaraan akan menjadi tanggung jawab saya saat peminjaman.
                     </label>
                 </div>
                 

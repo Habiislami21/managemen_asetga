@@ -64,6 +64,7 @@ class PeminjamanController extends Controller
         
         $validated = $request->validate([
             'nama_peminjam' => 'required|string|max:255',
+            'nama_driver' => 'required|string|max:255',
             'nomor_hp' => 'required|string|max:20',
             'kendaraan_id' => 'required|exists:kendaraans,id',
             'tanggal_pinjam' => 'required|date',
@@ -109,7 +110,8 @@ class PeminjamanController extends Controller
         $jamIndo = \Carbon\Carbon::parse($peminjaman->jam_pinjam)->format('H.i') . ' - ' . \Carbon\Carbon::parse($peminjaman->jam_kembali)->format('H.i') . ' WIB';
 
         $waMessage = "*PENGAJUAN PEMINJAMAN KENDARAAN*\n\n";
-        $waMessage .= "*Nama:* {$peminjaman->nama_peminjam}\n";
+        $waMessage .= "*Peminjam:* {$peminjaman->nama_peminjam}\n";
+        $waMessage .= "*Driver:* {$peminjaman->nama_driver}\n";
         $waMessage .= "*Nomor HP:* {$peminjaman->nomor_hp}\n";
         $waMessage .= "*Kendaraan:* {$kendaraan->nama} ({$kendaraan->kategori})\n";
         $waMessage .= "*Tanggal:* {$tanggalIndo}\n";
@@ -274,12 +276,12 @@ class PeminjamanController extends Controller
             $chartData[] = $usage ? $usage->total : 0;
         }
 
-        // Data statistik pengemudi (berdasarkan nama_peminjam yang disetujui)
-        $topDrivers = Peminjaman::selectRaw('nama_peminjam, COUNT(*) as total_pinjam')
+        // Data statistik pengemudi (berdasarkan nama_driver yang disetujui)
+        $topDrivers = Peminjaman::selectRaw('nama_driver, COUNT(*) as total_pinjam')
             ->whereMonth('tanggal_pinjam', $bulan)
             ->whereYear('tanggal_pinjam', $tahun)
             ->whereIn('status', ['approved', 'completed'])
-            ->groupBy('nama_peminjam')
+            ->groupBy('nama_driver')
             ->orderByDesc('total_pinjam')
             ->limit(10)
             ->get();

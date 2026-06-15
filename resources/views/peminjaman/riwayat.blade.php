@@ -76,7 +76,8 @@
                         <tr>
                             <th>No</th>
                             <th>Tanggal Pinjam</th>
-                            <th>Nama Supir / Peminjam</th>
+                            <th>Peminjam</th>
+                            <th>Driver</th>
                             <th>Kendaraan</th>
                             <th>Jam</th>
                             <th>Keperluan</th>
@@ -90,6 +91,7 @@
                                 <td>{{ $peminjamans->firstItem() + $index }}</td>
                                 <td>{{ \Carbon\Carbon::parse($peminjaman->tanggal_pinjam)->format('d/m/Y') }}</td>
                                 <td>{{ $peminjaman->nama_peminjam }}</td>
+                                <td>{{ $peminjaman->nama_driver }}</td>
                                 <td>{{ $peminjaman->kendaraan->nama }} <small class="text-muted">({{ $peminjaman->kendaraan->kategori }})</small></td>
                                 <td>{{ \Carbon\Carbon::parse($peminjaman->jam_pinjam)->format('H:i') }} - {{ \Carbon\Carbon::parse($peminjaman->jam_kembali)->format('H:i') }}</td>
                                 <td>

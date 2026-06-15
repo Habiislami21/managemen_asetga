@@ -266,7 +266,8 @@
                                                     {{ \Carbon\Carbon::parse($peminjaman->jam_pinjam)->format('H:i') }} - {{ \Carbon\Carbon::parse($peminjaman->jam_kembali)->format('H:i') }}
                                                 </div>
                                                 <div class="booking-details mt-1">
-                                                    <i class="far fa-user me-1"></i> {{ $peminjaman->nama_peminjam }}
+                                                    <div><i class="far fa-user me-1"></i> {{ $peminjaman->nama_peminjam }}</div>
+                                                    <div class="mt-1"><i class="fas fa-user-tie me-1"></i> Driver: {{ $peminjaman->nama_driver }}</div>
                                                 </div>
                                             </div>
                                             <div>

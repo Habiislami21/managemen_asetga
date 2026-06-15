@@ -568,14 +568,10 @@
     </div>
 
     <script>
-        // Display current date
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById('current-date').textContent = now.toLocaleDateString('id-ID', options);
         
-        // Parallax mousemove effect dinonaktifkan untuk menghemat CPU browser.
-
-        // AI Chatbot Widget Logic
         const aiChatToggle = document.getElementById('ai-chat-toggle');
         const aiChatClose = document.getElementById('ai-chat-close');
         const aiChatWindow = document.getElementById('ai-chat-window');
@@ -585,15 +581,13 @@
         const aiChatPrompt = document.getElementById('ai-chat-prompt');
 
         if (aiChatPrompt) {
-            // Buka chat window saat prompt diklik
             aiChatPrompt.addEventListener('click', () => {
                 aiChatPrompt.style.display = 'none';
                 if (aiChatWindow.classList.contains('chat-window-hidden')) {
                     aiChatToggle.click();
                 }
             });
-            
-            // Hilangkan prompt otomatis setelah 15 detik agar tidak mengganggu
+        
             setTimeout(() => {
                 if(aiChatPrompt) {
                     aiChatPrompt.style.opacity = '0';
@@ -603,7 +597,6 @@
         }
 
         if (aiChatToggle && aiChatWindow) {
-            // Toggle Chat Window
             aiChatToggle.addEventListener('click', () => {
                 if (aiChatPrompt) aiChatPrompt.style.display = 'none';
                 

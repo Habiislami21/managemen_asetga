@@ -127,7 +127,7 @@
                                 <thead>
                                     <tr>
                                         <th class="ps-4">No</th>
-                                        <th>Nama Supir / Peminjam</th>
+                                        <th>Nama Supir</th>
                                         <th class="text-center">Total Pinjam</th>
                                     </tr>
                                 </thead>
@@ -135,7 +135,7 @@
                                     @forelse($topDrivers as $index => $driver)
                                         <tr>
                                             <td class="ps-4">{{ $index + 1 }}</td>
-                                            <td class="fw-medium">{{ $driver->nama_peminjam }}</td>
+                                            <td class="fw-medium">{{ $driver->nama_driver }}</td>
                                             <td class="text-center">
                                                 <span class="badge bg-primary rounded-pill">{{ $driver->total_pinjam }}x</span>
                                             </td>

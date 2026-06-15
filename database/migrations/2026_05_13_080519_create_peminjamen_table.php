@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('peminjamans', function (Blueprint $table) {
             $table->id();
             $table->string('nama_peminjam');
+            $table->string('nama_driver');
             $table->string('nomor_hp');
             $table->foreignId('kendaraan_id')->constrained('kendaraans')->cascadeOnDelete();
             $table->date('tanggal_pinjam');
