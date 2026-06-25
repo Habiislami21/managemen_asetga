@@ -483,6 +483,17 @@
                     <i class="fas fa-chevron-right opacity-70 group-hover:opacity-100 transition-opacity text-xs"></i>
                 </a>
 
+                <a href="{{ route('peminjaman-event.create') }}" class="menu-btn flex items-center justify-between px-4 py-2.5 rounded-xl text-white font-medium group">
+                    <div class="flex items-center">
+                        <div class="bg-white bg-opacity-20 rounded-full p-1.5 mr-3">
+                            <i class="fas fa-car menu-icon text-sm"></i>
+                        </div>
+                        <span class="text-sm">Peminjaman Barang Event</span>
+                    </div>
+                    <i class="fas fa-chevron-right opacity-70 group-hover:opacity-100 transition-opacity text-xs"></i>
+                </a>
+
+
                 <a href="{{ route('peminjaman.jadwal') }}" class="menu-btn flex items-center justify-between px-4 py-2.5 rounded-xl text-white font-medium group">
                     <div class="flex items-center">
                         <div class="bg-white bg-opacity-20 rounded-full p-1.5 mr-3">

@@ -20,6 +20,8 @@ return new class extends Migration
             $table->date('tanggal_kembali');
             $table->string('tempat');
             $table->string('nama_kegiatan');
+            $table->string('nomor_surat')->nullable();
+            $table->string('file_docx')->nullable();
             $table->timestamps();
         });
     }

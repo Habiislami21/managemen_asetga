@@ -72,10 +72,9 @@ class PeminjamanController extends Controller
             'jam_kembali' => 'required|date_format:H:i|after:jam_pinjam',
             'keperluan' => 'required|string',
             'alamat_tujuan' => 'required|string',
-            'tanggung_jawab' => 'accepted' // Checkbox validation
+            'tanggung_jawab' => 'accepted'
         ]);
 
-        // Cek Bentrok Jadwal
         $bentrok = Peminjaman::where('kendaraan_id', $validated['kendaraan_id'])
             ->where('tanggal_pinjam', $validated['tanggal_pinjam'])
             ->whereIn('status', ['pending', 'approved'])

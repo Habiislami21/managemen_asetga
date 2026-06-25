@@ -171,3 +171,10 @@ Route::get('/peminjaman/statistik', [PeminjamanController::class, 'statistik'])-
 Route::get('/peminjaman/approval/{token}', [PeminjamanController::class, 'approvalView'])->name('peminjaman.approval');
 Route::post('/peminjaman/approval/{token}/approve', [PeminjamanController::class, 'approve'])->name('peminjaman.approve');
 Route::post('/peminjaman/approval/{token}/reject', [PeminjamanController::class, 'reject'])->name('peminjaman.reject');
+
+use App\Http\Controllers\PeminjamanEvent;
+
+Route::get('/peminjaman/barang', [PeminjamanEvent::class, 'create'])->name('peminjaman-event.create');
+Route::post('/peminjaman/barang', [PeminjamanEvent::class, 'store'])->name('peminjaman-event.store');
+Route::get('/peminjaman/barang/success/{peminjaman}', [PeminjamanEvent::class, 'success'])->name('peminjaman-event.success');
+Route::get('/peminjaman/barang/download/{peminjaman}', [PeminjamanEvent::class, 'download'])->name('peminjaman-event.download');

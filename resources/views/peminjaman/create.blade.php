@@ -468,7 +468,7 @@
                         Saya bertanggung jawab penuh atas kendaraan selama masa peminjaman. Segala kerusakan, kebersihan, dan bahan bakar bansin kendaraan akan menjadi tanggung jawab saya saat peminjaman.
                     </label>
                 </div>
-                
+                 
                 <button type="submit" class="btn btn-submit" 
                         onclick="if(document.getElementById('peminjamanForm').checkValidity()) { this.disabled=true; this.innerHTML='<i class=\'fas fa-spinner fa-spin\'></i> Mengirim...'; this.form.submit(); }">
                     <i class="fas fa-paper-plane btn-icon"></i>Kirim Pengajuan
