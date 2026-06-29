@@ -286,7 +286,7 @@
                                 <div class="row g-3 align-items-end">
                                     <div class="col-md-1 col-2">
                                         <label class="form-label">No</label>
-                                        <input type="text" class="form-control row-number" value="{{ $index + 1 }}" readonly>
+                                        <input type="text" class="form-control row-number text-center fw-bold px-1" value="{{ $index + 1 }}" readonly tabindex="-1">
                                     </div>
                                     <div class="col-md-7 col-10">
                                         <label class="form-label">Nama Barang</label>
@@ -357,7 +357,7 @@
                 <div class="row g-3 align-items-end">
                     <div class="col-md-1 col-2">
                         <label class="form-label">No</label>
-                        <input type="text" class="form-control row-number" value="${index + 1}" readonly>
+                        <input type="text" class="form-control row-number text-center fw-bold px-1" value="${index + 1}" readonly tabindex="-1">
                     </div>
                     <div class="col-md-7 col-10">
                         <label class="form-label">Nama Barang</label>
@@ -387,6 +387,9 @@
             removeBtn.closest('[data-row]').remove();
             refreshRowNumbers();
         });
+
+        // Isi nomor baris segera saat halaman pertama kali dimuat
+        refreshRowNumbers();
 
         form.addEventListener('submit', () => {
             submitBtn.disabled = true;

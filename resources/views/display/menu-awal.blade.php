@@ -531,16 +531,12 @@
         </div>
     </div>
 
-    <!-- AI Chatbot Floating Widget -->
     <div id="ai-chat-widget">
-        <!-- Chat Bubble Prompt -->
         <div id="ai-chat-prompt" class="fixed bottom-24 right-5 bg-white text-purple-700 px-4 py-2 rounded-2xl shadow-xl text-sm font-medium z-40 cursor-pointer hover:bg-gray-50 transition-all duration-300 animate-bounce">
             Kalo bingung tanya disini aja! 👋
-            <!-- Tail of the bubble -->
             <div class="absolute -bottom-2 right-6 w-4 h-4 bg-white transform rotate-45 shadow-sm"></div>
         </div>
 
-        <!-- Floating Toggle Button (Habi Icon) -->
         <button id="ai-chat-toggle" class="fixed bottom-5 right-5 w-16 h-16 rounded-full border-4 border-purple-600 shadow-2xl overflow-hidden focus:outline-none hover:scale-110 transition-all z-50">
             <img src="{{ asset('img/habiislami.jpeg') }}" alt="Habi AI" class="w-full h-full object-cover">
             <span class="absolute top-1 right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-white shadow"></span>

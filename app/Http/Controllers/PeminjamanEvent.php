@@ -46,23 +46,23 @@ class PeminjamanEvent extends Controller
         }
 
         $peminjaman = DB::transaction(function () use ($validated, $barangItems) {
-            $nomorSurat = $this->generateNomorSurat();
+            $nomorPeminjaman = $this->generateNomorPeminjaman();
 
             $peminjaman = PeminjamanBarang::create([
-                'nama_peminjam' => $validated['nama_peminjam'],
-                'divisi' => $validated['divisi'],
-                'nomor_hp' => $validated['nomor_hp'],
+                'nama_peminjam'    => $validated['nama_peminjam'],
+                'divisi'           => $validated['divisi'],
+                'nomor_hp'         => $validated['nomor_hp'],
                 'tanggal_kegiatan' => $validated['tanggal_kegiatan'],
-                'tanggal_kembali' => $validated['tanggal_kembali'],
-                'tempat' => $validated['tempat'],
-                'nama_kegiatan' => $validated['nama_kegiatan'],
-                'nomor_surat' => $nomorSurat,
+                'tanggal_kembali'  => $validated['tanggal_kembali'],
+                'tempat'           => $validated['tempat'],
+                'nama_kegiatan'    => $validated['nama_kegiatan'],
+                'nomor_peminjaman' => $nomorPeminjaman,
             ]);
 
             foreach ($barangItems as $barang) {
                 $peminjaman->items()->create([
                     'nama_barang' => $barang['nama_barang'],
-                    'jumlah' => $barang['jumlah'],
+                    'jumlah'      => $barang['jumlah'],
                 ]);
             }
 
@@ -72,7 +72,7 @@ class PeminjamanEvent extends Controller
         try {
             $filePath = $this->wordService->generate($peminjaman);
             $peminjaman->update([
-                'file_docx' => str_replace(storage_path('app') . DIRECTORY_SEPARATOR, '', $filePath),
+                'file_docx' => 'peminjaman_barang/' . basename($filePath),
             ]);
         } catch (\Throwable $e) {
             report($e);
@@ -101,7 +101,7 @@ class PeminjamanEvent extends Controller
         $path = storage_path('app/' . $peminjaman->file_docx);
 
         if (! file_exists($path)) {
-            abort(404, 'File dokumen tidak ditemukan.');
+            abort(404, 'File dokumen tidak ditemukan di server.');
         }
 
         $filename = basename($path);
@@ -109,7 +109,11 @@ class PeminjamanEvent extends Controller
         return response()->download($path, $filename);
     }
 
-    private function generateNomorSurat(): string
+    /**
+     * Generate nomor peminjaman otomatis.
+     * Format: PB-YYYYMM-XXX (contoh: PB-202606-001)
+     */
+    private function generateNomorPeminjaman(): string
     {
         $now = Carbon::now();
         $count = PeminjamanBarang::whereYear('created_at', $now->year)
@@ -117,10 +121,10 @@ class PeminjamanEvent extends Controller
             ->count() + 1;
 
         return sprintf(
-            '%03d/AST-BMIKP/SPB/%02d/%d',
-            $count,
+            'PB-%d%02d-%03d',
+            $now->year,
             $now->month,
-            $now->year
+            $count
         );
     }
 }

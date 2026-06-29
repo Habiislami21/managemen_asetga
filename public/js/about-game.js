@@ -74,6 +74,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let typeInterval;
     let introFinished = localStorage.getItem('introFinished_about') === 'true';
 
+    // Intro dialog sequences — declared here so they are accessible before initGame() runs
+    const introDialogs = [
+        "Halo! Selamat datang di kantor BMI Pusat. Saya Habi Islami dari IT Support, pemandu sekaligus developer halaman ini.",
+        "Di sini, Anda bisa mengenal seluruh tim Bagian Aset & GA dengan cara yang interaktif.",
+        "Silakan klik setiap anggota tim yang ada di ruangan ini untuk berkenalan dengan mereka. Selamat menjelajah!"
+    ];
+    let introIdx = 0;
+
     // DOM Elements
     const officeEnvironment = document.getElementById('office-environment');
     const introOverlay = document.getElementById('intro-overlay');
@@ -211,12 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Intro Sequence
-    const introDialogs = [
-        "Halo! Selamat datang di kantor BMI Pusat. Saya Habi Islami dari IT Support, pemandu sekaligus developer halaman ini.",
-        "Di sini, Anda bisa mengenal seluruh tim Bagian Aset & GA dengan cara yang interaktif.",
-        "Silakan klik setiap anggota tim yang ada di ruangan ini untuk berkenalan dengan mereka. Selamat menjelajah!"
-    ];
-    let introIdx = 0;
 
     function playIntro() {
         introIdx = 0;

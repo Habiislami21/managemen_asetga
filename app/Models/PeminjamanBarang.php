@@ -10,6 +10,7 @@ class PeminjamanBarang extends Model
     use HasFactory;
 
     protected $fillable = [
+        'nomor_peminjaman',
         'nama_peminjam',
         'divisi',
         'nomor_hp',
