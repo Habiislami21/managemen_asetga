@@ -19,17 +19,35 @@ class PeminjamanController extends Controller
 
     private function autoExpirePendingRequests()
     {
-        // Cari peminjaman yang masih pending dan umurnya lebih dari 1 jam
-        $expiredPeminjamans = Peminjaman::where('status', 'pending')
-            ->where('created_at', '<=', \Carbon\Carbon::now()->subHour())
+        // Cari peminjaman yang masih pending dan umurnya lebih dari 3 jam
+        $expiredPeminjamans = Peminjaman::with('kendaraan')
+            ->where('status', 'pending')
+            ->where('created_at', '<=', \Carbon\Carbon::now()->subHours(3))
             ->get();
 
         foreach ($expiredPeminjamans as $peminjaman) {
             $peminjaman->update([
                 'status' => 'rejected',
-                'catatan_admin' => 'Otomatis dibatalkan sistem: Melewati batas waktu approval (1 jam).',
+                'catatan_admin' => 'Otomatis dibatalkan sistem: Melewati batas waktu approval (3 jam).',
                 'approved_at' => \Carbon\Carbon::now(),
             ]);
+
+            // Kirim notifikasi WA ke peminjam atas penolakan otomatis oleh sistem
+            try {
+                $tanggalIndo = \Carbon\Carbon::parse($peminjaman->tanggal_pinjam)->locale('id')->translatedFormat('d F Y');
+                $jamIndo = \Carbon\Carbon::parse($peminjaman->jam_pinjam)->format('H.i') . ' - ' . \Carbon\Carbon::parse($peminjaman->jam_kembali)->format('H.i') . ' WIB';
+
+                $waMessage = "*Notifikasi Pembatalan Otomatis Peminjaman*\n\n";
+                $waMessage .= "Mohon maaf {$peminjaman->nama_peminjam},\n\n";
+                $waMessage .= "Pengajuan peminjaman kendaraan *{$peminjaman->kendaraan->nama}* untuk tanggal *{$tanggalIndo}* jam *{$jamIndo}* telah *DIBATALKAN OTOMATIS* oleh sistem.\n\n";
+                $waMessage .= "*Alasan:* Tidak ada respons dari Admin dalam batas waktu 3 jam.\n\n";
+                $waMessage .= "Silakan ajukan kembali atau hubungi Admin GA secara langsung jika Anda masih memerlukan kendaraan tersebut.\n\n";
+                $waMessage .= "Terima kasih.";
+
+                $this->whatsAppService->sendMessageCurl($peminjaman->nomor_hp, $waMessage);
+            } catch (\Exception $e) {
+                \Log::error('Gagal mengirim WhatsApp Auto-Reject: ' . $e->getMessage());
+            }
         }
     }
 
