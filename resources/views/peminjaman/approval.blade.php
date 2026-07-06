@@ -193,12 +193,9 @@
             @if($peminjaman->status == 'pending')
                 <div class="row g-2">
                     <div class="col-md-6">
-                        <form action="{{ route('peminjaman.approve', $peminjaman->approval_token) }}" method="POST" id="formApprove">
-                            @csrf
-                            <button type="button" class="btn btn-approve w-100" id="btnApprove">
-                                <i class="fas fa-check-circle me-2"></i>Setujui
-                            </button>
-                        </form>
+                        <button type="button" class="btn btn-approve w-100" id="btnApprove">
+                            <i class="fas fa-check-circle me-2"></i>Setujui
+                        </button>
                     </div>
                     <div class="col-md-6">
                         <button type="button" class="btn btn-reject w-100" id="btnReject">
@@ -211,7 +208,38 @@
                     <i class="fas fa-info-circle me-2"></i>
                     Pengajuan ini telah diproses (<strong>{{ strtoupper($peminjaman->status) }}</strong>) pada {{ \Carbon\Carbon::parse($peminjaman->approved_at)->locale('id')->translatedFormat('d F Y, H.i') }} WIB.
                 </div>
+                @if($peminjaman->catatan_admin)
+                    <div class="mt-3 p-3 rounded" style="background:#f8f9fa; border-left: 4px solid {{ $peminjaman->status == 'approved' ? '#2a9d5f' : '#e53e3e' }};">
+                        <strong><i class="fas fa-comment-alt me-2"></i>Catatan Admin:</strong>
+                        <p class="mb-0 mt-1">{{ $peminjaman->catatan_admin }}</p>
+                    </div>
+                @endif
             @endif
+        </div>
+    </div>
+
+    <!-- Modal Approve -->
+    <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <form action="{{ route('peminjaman.approve', $peminjaman->approval_token) }}" method="POST" id="formApprove">
+                    @csrf
+                    <div class="modal-header text-white" style="background-color:#2a9d5f;">
+                        <h5 class="modal-title" id="approveModalLabel"><i class="fas fa-check-circle me-2"></i>Setujui Peminjaman</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label for="catatan_approve" class="form-label fw-bold">Catatan Admin (Opsional)</label>
+                            <textarea class="form-control" id="catatan_approve" name="catatan_admin" rows="3" placeholder="Contoh: Disetujui, silakan ambil kunci di meja GA."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn px-4 text-white fw-bold" style="background-color:#2a9d5f;">Ya, Setujui</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -242,29 +270,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Handler untuk tombol Approve
+        // Handler untuk tombol Approve - buka modal
         document.getElementById('btnApprove')?.addEventListener('click', function() {
+            const approveModal = new bootstrap.Modal(document.getElementById('approveModal'));
+            approveModal.show();
+        });
+
+        // Handler submit form approve
+        document.getElementById('formApprove')?.addEventListener('submit', function() {
             Swal.fire({
-                title: 'Setujui Peminjaman?',
-                text: "Apakah Anda yakin ingin menyetujui pengajuan peminjaman kendaraan ini?",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#2a9d5f',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Ya, Setujui!',
-                cancelButtonText: 'Batal',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Memproses...',
-                        text: 'Harap tunggu sebentar',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-                    document.getElementById('formApprove').submit();
+                title: 'Memproses...',
+                text: 'Harap tunggu sebentar',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
                 }
             });
         });

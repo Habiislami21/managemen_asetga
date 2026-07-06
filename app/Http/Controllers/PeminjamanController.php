@@ -178,8 +178,11 @@ class PeminjamanController extends Controller
             return back()->with('error', 'Status pengajuan ini sudah ' . $peminjaman->status);
         }
 
+        $catatanAdmin = $request->input('catatan_admin');
+
         $peminjaman->update([
             'status' => 'approved',
+            'catatan_admin' => $catatanAdmin,
             'approved_at' => now(),
             // 'approved_by' => 'admin_name' jika perlu
         ]);
@@ -195,6 +198,9 @@ class PeminjamanController extends Controller
             $waDriver .= "*Kendaraan:* {$peminjaman->kendaraan->nama}\n";
             $waDriver .= "*Tanggal:* {$tanggalIndo}\n";
             $waDriver .= "*Jam:* {$jamIndo}\n\n";
+            if ($catatanAdmin) {
+                $waDriver .= "*Catatan Admin:* {$catatanAdmin}\n\n";
+            }
             $waDriver .= "Silakan ambil kunci kendaraan di bagian GA sesuai jadwal yang ditentukan.\n\n";
             $waDriver .= "Terima kasih.";
             
