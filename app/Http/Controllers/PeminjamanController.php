@@ -19,7 +19,6 @@ class PeminjamanController extends Controller
 
     private function autoExpirePendingRequests()
     {
-        // Cari peminjaman yang masih pending dan umurnya lebih dari 3 jam
         $expiredPeminjamans = Peminjaman::with('kendaraan')
             ->where('status', 'pending')
             ->where('created_at', '<=', \Carbon\Carbon::now()->subHours(3))
@@ -108,21 +107,13 @@ class PeminjamanController extends Controller
         if ($bentrok) {
             return back()->withInput()->withErrors(['kendaraan_id' => 'Kendaraan ini sudah dibooking pada rentang waktu tersebut.']);
         }
-
-        // Generate token
         $validated['approval_token'] = Str::random(32);
-        
-        // Remove tanggung_jawab before insert
         unset($validated['tanggung_jawab']);
 
         $peminjaman = Peminjaman::create($validated);
-
-        // Kirim WA ke Admin Group
         $kendaraan = Kendaraan::find($validated['kendaraan_id']);
         $groupId = env('FONTEE_WHATSAPP_GROUP_ID');
         $approvalLink = url('/peminjaman/approval/' . $peminjaman->approval_token);
-
-        // Format tanggal dan jam untuk pesan WA
         $tanggalIndo = \Carbon\Carbon::parse($peminjaman->tanggal_pinjam)->locale('id')->translatedFormat('d F Y');
         $jamIndo = \Carbon\Carbon::parse($peminjaman->jam_pinjam)->format('H.i') . ' - ' . \Carbon\Carbon::parse($peminjaman->jam_kembali)->format('H.i') . ' WIB';
 
@@ -140,8 +131,6 @@ class PeminjamanController extends Controller
 
         try {
             $this->whatsAppService->sendMessageCurl($groupId, $waMessage);
-            
-            // Kirim pesan notifikasi ke peminjam
             $waDriver = "*Notifikasi Sistem BMI*\n\n";
             $waDriver .= "Halo {$peminjaman->nama_peminjam},\n\n";
             $waDriver .= "Pengajuan peminjaman kendaraan *{$kendaraan->nama}* untuk tanggal *{$tanggalIndo}* telah kami terima.\n";
@@ -187,7 +176,6 @@ class PeminjamanController extends Controller
             // 'approved_by' => 'admin_name' jika perlu
         ]);
         
-        // Kirim notifikasi WA ke peminjam
         try {
             $tanggalIndo = \Carbon\Carbon::parse($peminjaman->tanggal_pinjam)->locale('id')->translatedFormat('d F Y');
             $jamIndo = \Carbon\Carbon::parse($peminjaman->jam_pinjam)->format('H.i') . ' - ' . \Carbon\Carbon::parse($peminjaman->jam_kembali)->format('H.i') . ' WIB';
@@ -248,7 +236,6 @@ class PeminjamanController extends Controller
     public function riwayat(Request $request)
     {
         $this->autoExpirePendingRequests();
-        
         $peminjamans = Peminjaman::with('kendaraan')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
@@ -259,8 +246,6 @@ class PeminjamanController extends Controller
     public function statistikAuth(Request $request)
     {
         $password = $request->input('password');
-        
-        // Cek password statis (bisa diganti ambil dari .env)
         if ($password === 'adminaset123') {
             session(['statistik_unlocked' => true]);
             return redirect()->route('peminjaman.statistik');

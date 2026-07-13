@@ -178,3 +178,8 @@ Route::get('/peminjaman/barang', [PeminjamanEvent::class, 'create'])->name('pemi
 Route::post('/peminjaman/barang', [PeminjamanEvent::class, 'store'])->name('peminjaman-event.store');
 Route::get('/peminjaman/barang/success/{peminjaman}', [PeminjamanEvent::class, 'success'])->name('peminjaman-event.success');
 Route::get('/peminjaman/barang/download/{peminjaman}', [PeminjamanEvent::class, 'download'])->name('peminjaman-event.download');
+
+Route::get('/peminjaman/kendaraan-event', [PeminjamanEvent::class, 'createKendaraan'])->name('peminjaman-event.kendaraan.create');
+Route::post('/peminjaman/kendaraan-event', [PeminjamanEvent::class, 'storeKendaraan'])->name('peminjaman-event.kendaraan.store');
+Route::get('/peminjaman/kendaraan-event/success/{peminjaman}', [PeminjamanEvent::class, 'successKendaraan'])->name('peminjaman-event.kendaraan.success');
+Route::get('/peminjaman/kendaraan-event/download/{peminjaman}', [PeminjamanEvent::class, 'downloadKendaraan'])->name('peminjaman-event.kendaraan.download');
