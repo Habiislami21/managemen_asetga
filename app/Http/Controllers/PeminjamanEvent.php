@@ -137,7 +137,8 @@ class PeminjamanEvent extends Controller
 
     public function createKendaraan()
     {
-        return view('peminjaman_event.peminjaman_kendaraan');
+        $divisis = \App\Models\DivisiAmanah::orderBy('divisi', 'asc')->get();
+        return view('peminjaman_event.peminjaman_kendaraan', compact('divisis'));
     }
 
     public function storeKendaraan(Request $request)

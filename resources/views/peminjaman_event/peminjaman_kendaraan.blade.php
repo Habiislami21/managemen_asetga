@@ -211,12 +211,15 @@
                 <div class="row">
                     <div class="col-md-6 form-group">
                         <label for="divisi">Divisi Amanah</label>
-                        <div class="input-with-icon">
-                            <input type="text" class="form-control @error('divisi') is-invalid @enderror"
-                                   name="divisi" id="divisi" placeholder="Divisi / bagian"
-                                   value="{{ old('divisi') }}" required>
-                            <i class="fas fa-building input-icon"></i>
-                        </div>
+                        <select class="form-select @error('divisi') is-invalid @enderror"
+                                name="divisi" id="divisi" required>
+                            <option value="" disabled {{ old('divisi') ? '' : 'selected' }}>-- Pilih Divisi --</option>
+                            @foreach ($divisis as $d)
+                                <option value="{{ $d->divisi }}" {{ old('divisi') == $d->divisi ? 'selected' : '' }}>
+                                    {{ $d->divisi }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-6 form-group">
                         <label for="jabatan">Amanah Jabatan</label>

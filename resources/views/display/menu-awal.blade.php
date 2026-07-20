@@ -493,6 +493,16 @@
                     <i class="fas fa-chevron-right opacity-70 group-hover:opacity-100 transition-opacity text-xs"></i>
                 </a>
 
+                <a href="{{ route('peminjaman-event.kendaraan.create')  }}" class="menu-btn flex items-center justify-between px-4 py-2.5 rounded-xl text-white font-medium group">
+                    <div class="flex items-center">
+                        <div class="bg-white bg-opacity-20 rounded-full p-1.5 mr-3">
+                            <i class="fas fa-car menu-icon text-sm"></i>
+                        </div>
+                        <span class="text-sm">Peminjaman Kendaraan Event</span>
+                    </div>
+                    <i class="fas fa-chevron-right opacity-70 group-hover:opacity-100 transition-opacity text-xs"></i>
+                </a>
+
 
                 <a href="{{ route('peminjaman.jadwal') }}" class="menu-btn flex items-center justify-between px-4 py-2.5 rounded-xl text-white font-medium group">
                     <div class="flex items-center">
@@ -542,7 +552,6 @@
             <span class="absolute top-1 right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-white shadow"></span>
         </button>
 
-        <!-- Chat Window -->
         <div id="ai-chat-window" class="chat-window-hidden">
             <div id="ai-chat-header">
                 <div class="ai-avatar-info">
